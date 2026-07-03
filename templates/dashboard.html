@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My teams — RecMgr{% endblock %}
+{% block content %}
+<h1>My teams</h1>
+
+{% for c in cards %}
+  <div class="card">
+    <h3><a href="{{ url_for('team_manage', team_id=c.team.id) }}">{{ c.team.name }}</a></h3>
+    <div class="sub">{{ c.team.sport }}</div>
+    {% if c.next %}
+      <p class="counts">
+        Next: <strong>{{ c.next.game.game_dt }}</strong> vs {{ c.next.game.opponent or "TBD" }}<br>
+        {{ c.next.counts.total }} in ({{ c.next.counts.male }}M / {{ c.next.counts.female }}F)
+        {% if c.next.problems %}
+          — <span class="short">SHORT: {{ c.next.problems | join(", ") }}</span>
+        {% else %}
+          — <span class="ok">covered ✓</span>
+        {% endif %}
+      </p>
+      <a class="btn small ghost" href="{{ url_for('game_view', game_id=c.next.game.id) }}">Game details</a>
+    {% else %}
+      <p class="sub">No upcoming games scheduled.</p>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="card"><p>No teams yet. Create your first team to get started.</p></div>
+{% endfor %}
+
+<div class="btnrow">
+  <a class="btn" href="{{ url_for('team_new') }}">+ New team</a>
+  <form method="post" action="{{ url_for('tick') }}" class="inline-form">
+    <button class="btn ghost" type="submit">Run scheduler now</button>
+  </form>
+</div>
+<p class="sub">The scheduler also runs automatically every minute: RSVP requests, daily reminders, 72-hour checks and tournament reminders.</p>
+{% endblock %}

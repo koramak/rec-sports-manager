@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ "Team settings" if team else "New team" }} — RecMgr{% endblock %}
+{% block content %}
+<h1>{{ team.name if team else "New team" }}</h1>
+<div class="card">
+  <form method="post" class="stack">
+    <label>Team name</label>
+    <input type="text" name="name" value="{{ team.name if team else '' }}" required>
+    <label>Sport / league</label>
+    <input type="text" name="sport" value="{{ team.sport if team else 'Softball' }}">
+    <h2>Roster minimums</h2>
+    <div class="row3">
+      <div>
+        <label>Total players</label>
+        <input type="number" name="min_players" min="0" value="{{ team.min_players if team else 8 }}">
+      </div>
+      <div>
+        <label>Min men</label>
+        <input type="number" name="min_male" min="0" value="{{ team.min_male if team else 0 }}">
+      </div>
+      <div>
+        <label>Min women</label>
+        <input type="number" name="min_female" min="0" value="{{ team.min_female if team else 0 }}">
+      </div>
+    </div>
+    <button class="btn block" type="submit">{{ "Save" if team else "Create team" }}</button>
+  </form>
+</div>
+
+{% if team %}
+<h2>Co-managers</h2>
+<div class="card">
+  {% for cm in comanagers %}
+    <p>{{ cm.name }} <span class="sub">({{ cm.email }})</span>
+      <form method="post" class="inline-form"
+            action="{{ url_for('comanager_remove', team_id=team.id, user_id=cm.id) }}">
+        <button class="btn small danger" type="submit">Remove</button>
+      </form>
+    </p>
+  {% else %}
+    <p class="sub">No co-managers yet. Co-managers get identical management access to this team.</p>
+  {% endfor %}
+  <form method="post" action="{{ url_for('comanager_add', team_id=team.id) }}" class="stack">
+    <label>Add co-manager by email (they must have a manager account)</label>
+    <input type="email" name="email" required>
+    <button class="btn small" type="submit">Add co-manager</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

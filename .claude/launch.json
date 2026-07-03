@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rec-sports-manager",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/Users/zanezmiller/Desktop/COACH/app.py"],
+      "port": 5000,
+      "autoPort": true
+    }
+  ]
+}

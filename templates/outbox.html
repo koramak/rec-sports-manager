@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Outbox — RecMgr{% endblock %}
+{% block content %}
+<h1>Notification outbox</h1>
+<p class="sub">Every message the system sent to your players (SMS/email gateway stub). Messages to a player on multiple teams are batched into one.</p>
+{% for n in rows %}
+  <div class="card">
+    <div class="sub">{{ n.created_at }} · {{ n.channel | upper }} → {{ n.recipient }} ({{ n.contact }})</div>
+    <p class="notif">{{ n.body }}</p>
+  </div>
+{% else %}
+  <div class="card"><p class="sub">Nothing sent yet. The scheduler sends RSVP requests, daily reminders and tournament reminders automatically.</p></div>
+{% endfor %}
+{% endblock %}

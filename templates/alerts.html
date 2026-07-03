@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Alerts — RecMgr{% endblock %}
+{% block content %}
+<h1>Alerts</h1>
+{% for a in rows %}
+  <div class="card alert-item">
+    <div class="sub">{{ a.created_at }} · {{ "72-hour check" if a.kind == 'short72' else "Emergency" }}</div>
+    <p>{{ a.message }}</p>
+    {% if a.team_id %}<a class="btn small ghost" href="{{ url_for('team_manage', team_id=a.team_id) }}">Open team</a>{% endif %}
+  </div>
+{% else %}
+  <div class="card"><p class="sub">No alerts. You'll be notified here 72 hours before any short-handed game, and immediately if a late status change drops a team below minimums.</p></div>
+{% endfor %}
+{% endblock %}

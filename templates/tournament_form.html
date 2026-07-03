@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit tournament" if tournament else "New tournament" }} — RecMgr{% endblock %}
+{% block content %}
+<h1>{{ "Edit tournament" if tournament else "New tournament" }} — {{ team.name }}</h1>
+<div class="card">
+  <form method="post" class="stack">
+    <label>Tournament name *</label>
+    <input type="text" name="name" value="{{ tournament.name if tournament else '' }}" required>
+    <div class="row2">
+      <div>
+        <label>Date *</label>
+        <input type="date" name="date" value="{{ tournament.date if tournament else '' }}" required>
+      </div>
+      <div>
+        <label>Division</label>
+        <select name="division">
+          <option {% if tournament and tournament.division == 'Coed' %}selected{% endif %}>Coed</option>
+          <option {% if tournament and tournament.division == 'Mens' %}selected{% endif %}>Mens</option>
+        </select>
+      </div>
+    </div>
+    <label>Estimated location</label>
+    <input type="text" name="location" value="{{ tournament.location if tournament else '' }}">
+    <label>Host</label>
+    <input type="text" name="host" value="{{ tournament.host if tournament else '' }}">
+    <label>Estimated cost per person ($)</label>
+    <input type="number" name="cost" min="0" step="1" value="{{ tournament.cost if tournament else '' }}">
+    <button class="btn block" type="submit">Save tournament</button>
+  </form>
+</div>
+{% endblock %}

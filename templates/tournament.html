@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ t.name }} — RecMgr{% endblock %}
+{% block content %}
+<h1>{{ t.name }}</h1>
+<p class="sub">{{ t.date }} · {{ t.division }} · {{ t.location or "Location TBD" }}
+  {% if t.host %}· hosted by {{ t.host }}{% endif %}
+  {% if t.cost %}· ~${{ "%.0f" | format(t.cost) }}/person{% endif %}</p>
+<div class="btnrow">
+  <a class="btn small ghost" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
+  <a class="btn small ghost" href="{{ url_for('team_manage', team_id=team.id) }}">← {{ team.name }}</a>
+</div>
+
+<div class="card">
+  <h3>{{ in_count }} confirmed in</h3>
+  <table class="list">
+    <tr><th>Invited player</th><th>G</th><th>Status</th></tr>
+    {% for r in rows %}
+      <tr>
+        <td>{{ short_name(r.player.name) }}</td>
+        <td>{{ r.player.gender }}</td>
+        <td><span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" class="sub">No one invited yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h3>Invite more players (rolling)</h3>
+  <p class="sub">Reminders for unconfirmed RSVPs start automatically 3 weeks before the event.</p>
+  {% if candidates %}
+    <form method="post" action="{{ url_for('tournament_invite', tournament_id=t.id) }}" class="stack">
+      {% for p in candidates %}
+        <label style="display:flex;align-items:center;gap:8px;margin:6px 0;">
+          <input type="checkbox" name="player_id" value="{{ p.id }}">
+          {{ p.name }} ({{ p.gender }}){% if p.is_sub %} <span class="sub">— sub pool</span>{% endif %}
+        </label>
+      {% endfor %}
+      <button class="btn" type="submit">Send invites</button>
+    </form>
+  {% else %}
+    <p class="sub">Everyone in your player pool has been invited.</p>
+  {% endif %}
+</div>
+{% endblock %}

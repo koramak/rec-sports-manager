@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} — RecMgr{% endblock %}
+{% block content %}
+<h1>{{ team.name }}</h1>
+<p class="sub">{{ team.sport }} · minimums: {{ team.min_players }} players
+{% if team.min_male %}· {{ team.min_male }}M{% endif %}
+{% if team.min_female %}· {{ team.min_female }}F{% endif %}</p>
+
+<div class="btnrow">
+  <a class="btn small ghost" href="{{ url_for('team_settings', team_id=team.id) }}">Settings</a>
+  <a class="btn small ghost" href="{{ url_for('player_import', team_id=team.id) }}">Import players</a>
+</div>
+
+<div class="card">
+  <h3>Team RSVP link</h3>
+  <p class="sub">Share once — players pick their name, no login needed.</p>
+  <div class="linkbox">{{ base_url }}/{{ team.id }}</div>
+</div>
+
+<h2>Upcoming games</h2>
+{% for gi in game_infos %}
+  <div class="card">
+    <h3><a href="{{ url_for('game_view', game_id=gi.game.id) }}">{{ gi.game.game_dt }} vs {{ gi.game.opponent or "TBD" }}</a></h3>
+    <div class="sub">{{ gi.game.location or "Location TBD" }}</div>
+    <p class="counts">
+      {{ gi.counts.total }} in ({{ gi.counts.male }}M / {{ gi.counts.female }}F)
+      {% if gi.problems %}
+        — <span class="short">SHORT: {{ gi.problems | join(", ") }}</span>
+      {% else %}
+        — <span class="ok">covered ✓</span>
+      {% endif %}
+    </p>
+  </div>
+{% else %}
+  <div class="card"><p class="sub">No upcoming games.</p></div>
+{% endfor %}
+<a class="btn small" href="{{ url_for('game_new', team_id=team.id) }}">+ Add game</a>
+
+<h2>Tournaments</h2>
+{% for t in tournaments %}
+  <div class="card">
+    <h3><a href="{{ url_for('tournament_view', tournament_id=t.id) }}">{{ t.name }}</a></h3>
+    <div class="sub">{{ t.date }} · {{ t.division }} · {{ t.location or "Location TBD" }}
+      {% if t.cost %}· ~${{ "%.0f" | format(t.cost) }}/person{% endif %}</div>
+  </div>
+{% else %}
+  <div class="card"><p class="sub">No upcoming tournaments.</p></div>
+{% endfor %}
+<a class="btn small" href="{{ url_for('tournament_new', team_id=team.id) }}">+ Add tournament</a>
+
+<h2>Roster ({{ roster | length }})</h2>
+<div class="card">
+  <table class="list">
+    <tr><th>Player</th><th>G</th><th>Contact</th><th></th></tr>
+    {% for p in roster %}
+      <tr>
+        <td>
+          <strong>{{ p.name }}</strong>{% if p.number %} <span class="sub">#{{ p.number }}</span>{% endif %}
+          {% if p.positions %}<div class="sub">{{ p.positions }}</div>{% endif %}
+        </td>
+        <td>{{ p.gender }}</td>
+        <td class="sub">{{ p.phone or p.email }}</td>
+        <td class="right">
+          <a class="btn small ghost" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4" class="sub">No players yet — add them below or use Import.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<a class="btn small" href="{{ url_for('player_new', team_id=team.id) }}">+ Add player</a>
+
+{% if past %}
+<h2>Recent games</h2>
+{% for g in past %}
+  <div class="card"><span class="sub">{{ g.game_dt }} vs {{ g.opponent or "TBD" }}</span>
+    <a class="btn small ghost" href="{{ url_for('game_view', game_id=g.id) }}">View</a></div>
+{% endfor %}
+{% endif %}
+{% endblock %}

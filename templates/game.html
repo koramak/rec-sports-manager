@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Game {{ game.game_dt }} — RecMgr{% endblock %}
+{% block content %}
+<h1>{{ game.game_dt }} vs {{ game.opponent or "TBD" }}</h1>
+<p class="sub">{{ team.name }} · {{ game.location or "Location TBD" }}
+  {% if game.notes %}· {{ game.notes }}{% endif %}</p>
+<div class="btnrow">
+  <a class="btn small ghost" href="{{ url_for('game_edit', game_id=game.id) }}">Edit game</a>
+  <a class="btn small ghost" href="{{ url_for('team_manage', team_id=team.id) }}">← {{ team.name }}</a>
+</div>
+
+<div class="card">
+  <h3>Headcount</h3>
+  <p class="counts">
+    <strong>{{ counts.total }}</strong> in ({{ counts.male }}M / {{ counts.female }}F)
+    — need {{ team.min_players }}{% if team.min_male %}, {{ team.min_male }}M{% endif %}{% if team.min_female %}, {{ team.min_female }}F{% endif %}<br>
+    {% if problems %}
+      <span class="short">SHORT: {{ problems | join(", ") }}</span> — pick subs below.
+    {% else %}
+      <span class="ok">Minimums covered ✓</span>
+    {% endif %}
+  </p>
+</div>
+
+<h2>Roster RSVPs</h2>
+<div class="card">
+  <table class="list">
+    <tr><th>Player</th><th>G</th><th>Status</th></tr>
+    {% for r in rows %}
+      <tr>
+        <td>{{ short_name(r.player.name) }}</td>
+        <td>{{ r.player.gender }}</td>
+        <td><span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span></td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<h2>Subs</h2>
+{% if sub_rows %}
+<div class="card">
+  <table class="list">
+    <tr><th>Sub</th><th>G</th><th>Status</th></tr>
+    {% for s in sub_rows %}
+      <tr>
+        <td>{{ short_name(s.name) }}</td>
+        <td>{{ s.gender }}</td>
+        <td><span class="status-pill status-{{ s.status }}">{{ s.status | upper }}</span></td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+<div class="card">
+  <h3>Invite subs</h3>
+  {% if pool %}
+    <p class="sub">Each selected sub gets their own personal link for this game only.</p>
+    <form method="post" action="{{ url_for('invite_sub', game_id=game.id) }}" class="stack">
+      {% for p in pool %}
+        <label style="display:flex;align-items:center;gap:8px;margin:6px 0;">
+          <input type="checkbox" name="player_id" value="{{ p.id }}">
+          {{ p.name }} ({{ p.gender }}{% if p.positions %} · {{ p.positions }}{% endif %}{% if p.skill %} · {{ p.skill }}{% endif %})
+        </label>
+      {% endfor %}
+      <button class="btn" type="submit">Send sub invites</button>
+    </form>
+  {% else %}
+    <p class="sub">No available subs in your pool. <a href="{{ url_for('sub_new') }}">Add subs</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

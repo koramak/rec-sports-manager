@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Admin — RecMgr{% endblock %}
+{% block content %}
+<h1>System admin</h1>
+<div class="card">
+  <p class="counts">
+    {{ stats.players }} players · {{ stats.games }} games ·
+    {{ stats.tournaments }} tournaments · {{ stats.notifications }} notifications sent
+  </p>
+</div>
+
+<h2>Users</h2>
+<div class="card">
+  <table class="list">
+    <tr><th>Name</th><th>Email</th><th>Role</th></tr>
+    {% for m in managers %}
+      <tr><td>{{ m.name }}</td><td class="sub">{{ m.email }}</td><td>{{ m.role }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<h2>All teams</h2>
+<div class="card">
+  <table class="list">
+    <tr><th>Team</th><th>Owner</th><th>Roster</th><th></th></tr>
+    {% for t in teams %}
+      <tr>
+        <td>{{ t.name }} <span class="sub">({{ t.sport }})</span></td>
+        <td class="sub">{{ t.owner_name }}</td>
+        <td>{{ t.roster_n }}</td>
+        <td class="right"><a class="btn small ghost" href="{{ url_for('team_manage', team_id=t.id) }}">Open</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

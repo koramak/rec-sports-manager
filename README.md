@@ -5,6 +5,13 @@ Managers schedule games and tournaments; players RSVP through no-login links;
 the system chases stragglers automatically and alerts managers when a game is
 short-handed (including gender minimums), prompting manual sub selection.
 
+## Try it on the web
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/koramak/rec-sports-manager)
+
+One click (free tier, sign in with GitHub): Render reads `render.yaml`, seeds
+demo data on each deploy, and gives you a public `https://…onrender.com` URL.
+
 ## Stack
 
 Python 3.9+ · Flask · SQLite. No other dependencies.

@@ -10,8 +10,9 @@ from datetime import datetime, timedelta
 
 DT_FMT = "%Y-%m-%d %H:%M"
 D_FMT = "%Y-%m-%d"
-BASE_URL = os.environ.get("REC_BASE_URL") or (
-    "http://localhost:%s" % os.environ.get("PORT", "5000"))
+BASE_URL = (os.environ.get("REC_BASE_URL")
+            or os.environ.get("RENDER_EXTERNAL_URL")  # set by Render hosting
+            or "http://localhost:%s" % os.environ.get("PORT", "5000")).rstrip("/")
 
 
 def parse_dt(s):

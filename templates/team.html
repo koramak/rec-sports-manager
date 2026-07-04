@@ -12,7 +12,7 @@
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
     <div>
       <h1 style="margin:0;">{{ team.name }}</h1>
-      <div class="meta-line">{{ team.sport }} · min {{ team.min_players }} players{% if team.min_female %} · {{ team.min_female }}F{% endif %}{% if team.min_male %} · {{ team.min_male }}M{% endif %}</div>
+      <div class="meta-line">{{ team.team_type | capitalize }} · {{ team.sport }} · min {{ team.min_players }} players{% if team.min_female %} · {{ team.min_female }}F{% endif %}{% if team.min_male %} · {{ team.min_male }}M{% endif %}</div>
     </div>
     <div style="margin-left:auto;display:flex;gap:8px;">
       <a class="btn small outline" href="{{ url_for('team_settings', team_id=team.id) }}">Settings</a>
@@ -23,7 +23,7 @@
 </div>
 
 <div class="mobile-only" style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-  <div class="meta-line">{{ team.sport }} · min {{ team.min_players }} players{% if team.min_female %} · {{ team.min_female }}F{% endif %}{% if team.min_male %} · {{ team.min_male }}M{% endif %}</div>
+  <div class="meta-line">{{ team.team_type | capitalize }} · {{ team.sport }} · min {{ team.min_players }} players{% if team.min_female %} · {{ team.min_female }}F{% endif %}{% if team.min_male %} · {{ team.min_male }}M{% endif %}</div>
   <div style="margin-left:auto;display:flex;gap:6px;">
     <a class="btn small outline" href="{{ url_for('team_settings', team_id=team.id) }}">Settings</a>
     <a class="btn small outline" href="{{ url_for('player_import', team_id=team.id) }}">Import</a>
@@ -34,7 +34,6 @@
   <div class="team-col-a">
     <div class="card rsvp-link-card">
       <div class="eyebrow">Team RSVP link</div>
-      <div class="sub" style="margin-top:2px;">Share once — players pick their name, no login.</div>
       <div class="linkbox-row">
         <div class="linkbox" id="team-link">{{ base_url }}/{{ team.id }}</div>
         <button class="copy-btn" type="button" data-copy="{{ base_url }}/{{ team.id }}">Copy</button>
@@ -46,7 +45,7 @@
       <div class="card flush">
         <div class="card-body" style="display:flex;align-items:center;gap:10px;">
           <div style="flex:1;min-width:0;">
-            <div class="compact-title"><a href="{{ url_for('game_view', game_id=gi.game.id) }}">{{ gi.game.game_dt | gamedt }} vs {{ gi.game.opponent or "TBD" }}</a></div>
+            <div class="compact-title"><a href="{{ url_for('game_view', game_id=gi.game.id) }}">{{ gi.game.game_dt | gamedt }} {{ matchup(gi.game) }}</a></div>
             <div class="compact-meta">{{ gi.game.location or "Location TBD" }}</div>
           </div>
           <div class="headnum mid">{{ gi.counts.total }}<span class="denom">/{{ team.min_players }}</span></div>
@@ -85,16 +84,15 @@
       <a class="edit-link desk-only" style="margin-left:auto;" href="{{ url_for('player_new', team_id=team.id) }}">+ Add player</a>
     </div>
     <div class="card flush">
-      <div class="rows-head"><div>Player</div><div>G</div><div>Contact</div><div></div></div>
+      <div class="rows-head"><div>Player</div><div>G</div><div></div></div>
       <div class="list-rows">
         {% for p in roster %}
           <div class="list-row roster-row">
             <div class="lr-main">
-              <div class="lr-name">{{ p.name }}{% if p.number %} <span class="num">#{{ p.number }}</span>{% endif %}</div>
-              <div class="lr-meta">{{ p.positions or "—" }}<span class="contact-inline"> · {{ p.phone or p.email }}</span></div>
+              <div class="lr-name">{{ p.name }}</div>
+              <div class="lr-meta">{{ p.positions or "—" }}{% if p.skill %} · {{ p.skill }}{% endif %}</div>
             </div>
             <div class="lr-g">{{ p.gender }}</div>
-            <div class="lr-contact">{{ p.phone or p.email }}</div>
             <a class="edit-link" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
           </div>
         {% else %}
@@ -108,7 +106,7 @@
       <div class="section-h">Recent games</div>
       {% for g in past %}
         <div class="card" style="display:flex;align-items:center;gap:12px;">
-          <div class="compact-meta" style="flex:1;">{{ g.game_dt | gamedt }} vs {{ g.opponent or "TBD" }}</div>
+          <div class="compact-meta" style="flex:1;">{{ g.game_dt | gamedt }} {{ matchup(g) }}</div>
           <a class="edit-link" href="{{ url_for('game_view', game_id=g.id) }}">View</a>
         </div>
       {% endfor %}

@@ -16,19 +16,24 @@
   <input type="text" name="name" value="{{ team.name if team else '' }}" required>
   <label>Sport / league</label>
   <input type="text" name="sport" value="{{ team.sport if team else 'Softball' }}">
+  <label>Team type</label>
+  <select name="team_type">
+    <option value="league" {% if team and team.team_type == 'league' %}selected{% endif %}>League</option>
+    <option value="tournament" {% if team and team.team_type == 'tournament' %}selected{% endif %}>Tournament</option>
+  </select>
   <div class="section-h">Roster minimums</div>
   <div class="row3">
     <div>
       <label style="margin-top:0;">Total players</label>
-      <input type="number" name="min_players" min="0" value="{{ team.min_players if team else 8 }}">
+      <input type="number" name="min_players" min="0" value="{{ team.min_players if team else 10 }}">
     </div>
     <div>
       <label style="margin-top:0;">Min men</label>
-      <input type="number" name="min_male" min="0" value="{{ team.min_male if team else 0 }}">
+      <input type="number" name="min_male" min="0" value="{{ team.min_male if team else 7 }}">
     </div>
     <div>
       <label style="margin-top:0;">Min women</label>
-      <input type="number" name="min_female" min="0" value="{{ team.min_female if team else 0 }}">
+      <input type="number" name="min_female" min="0" value="{{ team.min_female if team else 3 }}">
     </div>
   </div>
   <button class="btn primary block" type="submit">{{ "Save" if team else "Create team" }}</button>

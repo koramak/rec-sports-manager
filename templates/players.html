@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block mainclass %}mid{% endblock %}
+{% block title %}Players — RecMgr{% endblock %}
+{% block content %}
+<h1>My players</h1>
+<p class="sub" style="margin-top:-8px;margin-bottom:14px;">Everyone across your teams and sub pool. The sub pool for a game is whoever isn't already on that team's roster.</p>
+
+<div class="card filters">
+  <input type="text" id="f-name" placeholder="Search name…" autocomplete="off">
+  <select id="f-pos">
+    <option value="">Any position</option>
+    {% for pos in POSITIONS %}<option>{{ pos }}</option>{% endfor %}
+  </select>
+  <select id="f-g">
+    <option value="">Any gender</option>
+    <option value="M">Male</option>
+    <option value="F">Female</option>
+  </select>
+  <select id="f-skill">
+    <option value="">Any skill</option>
+    {% for s in SKILLS %}<option value="{{ s }}">{{ s | capitalize }}</option>{% endfor %}
+  </select>
+</div>
+
+<div class="card flush">
+  <div class="list-rows" id="player-rows">
+    {% for e in items %}
+      {% set p = e.player %}
+      <div class="list-row player-row"
+           data-name="{{ p.name | lower }}"
+           data-pos="{{ p.positions or '' }}"
+           data-g="{{ p.gender }}"
+           data-skill="{{ p.skill or '' }}">
+        <div class="lr-main">
+          <div class="lr-name">{{ p.name }}</div>
+          <div class="lr-meta">{{ p.positions or "—" }}{% if p.skill %} · {{ p.skill }}{% endif %}
+            · {{ e.teams | join(", ") if e.teams else "sub pool" }}</div>
+        </div>
+        <div class="lr-g">{{ p.gender }}</div>
+        <button class="btn small outline share-btn" type="button"
+                data-share="Sub contact card — {{ p.name }}: {{ p.phone or p.email }}{% if p.positions %} · plays {{ p.positions }}{% endif %}{% if p.skill %} · {{ p.skill }}{% endif %} ({{ p.gender }})">Share</button>
+        <a class="edit-link" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
+      </div>
+    {% else %}
+      <div class="list-row"><div class="sub">No players yet.</div></div>
+    {% endfor %}
+    <div class="list-row" id="no-match" hidden><div class="sub">No players match those filters.</div></div>
+  </div>
+</div>
+<a class="btn dashed" href="{{ url_for('sub_new') }}">+ Add player to sub pool</a>
+<p class="sub">Share sends a player's contact card by SMS so another manager can pick them up.</p>
+
+<script>
+const rows = Array.from(document.querySelectorAll('.player-row'));
+const fName = document.getElementById('f-name'),
+      fPos = document.getElementById('f-pos'),
+      fG = document.getElementById('f-g'),
+      fSkill = document.getElementById('f-skill');
+function applyFilters() {
+  let shown = 0;
+  for (const r of rows) {
+    const ok = (!fName.value || r.dataset.name.includes(fName.value.toLowerCase()))
+      && (!fPos.value || r.dataset.pos.split(',').includes(fPos.value))
+      && (!fG.value || r.dataset.g === fG.value)
+      && (!fSkill.value || r.dataset.skill === fSkill.value);
+    r.hidden = !ok;
+    if (ok) shown++;
+  }
+  document.getElementById('no-match').hidden = shown > 0;
+}
+for (const el of [fName, fPos, fG, fSkill]) {
+  el.addEventListener('input', applyFilters);
+  el.addEventListener('change', applyFilters);
+}
+document.querySelectorAll('.share-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const text = btn.dataset.share;
+    if (navigator.share) {
+      try { await navigator.share({ text }); } catch (e) { /* cancelled */ }
+    } else {
+      location.href = 'sms:?&body=' + encodeURIComponent(text);
+    }
+  });
+});
+</script>
+{% endblock %}

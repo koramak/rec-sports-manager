@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block mainclass %}narrow{% endblock %}
+{% block title %}Donate — RecMgr{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <h1>Support RecMgr 💚</h1>
+  <p class="sub">RecMgr is free for every team. If it saves you from chasing RSVPs, a donation keeps the lights on.</p>
+
+  <div class="card">
+    <div class="eyebrow">Venmo</div>
+    <p class="meta-line" style="font-weight:700;font-size:17px;margin:6px 0;">@cetolan</p>
+    <a class="btn primary block" href="https://venmo.com/u/cetolan" target="_blank" rel="noopener">Donate with Venmo</a>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Zelle</div>
+    <p class="meta-line" style="font-weight:700;font-size:17px;margin:6px 0;">cetolan@gmail.com</p>
+    <p class="sub">Send any amount from your banking app using the email above.</p>
+    <button class="copy-btn" type="button" data-copy="cetolan@gmail.com">Copy email</button>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy);
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = 'Copy email'; }, 1500);
+    } catch (e) {
+      prompt('Copy:', btn.dataset.copy);
+    }
+  });
+});
+</script>
+{% endblock %}

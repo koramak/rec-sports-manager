@@ -7,7 +7,7 @@
   <a class="back" href="{{ url_for('team_manage', team_id=team.id) }}">←</a>
   <div class="pb-text">
     <div class="pb-eyebrow">{{ game.game_dt | gamedt }}</div>
-    <div class="pb-title">vs {{ game.opponent or "TBD" }}</div>
+    <div class="pb-title">{{ matchup(game) }}</div>
   </div>
 </div>
 {% endblock %}
@@ -16,7 +16,7 @@
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
     <div>
       <div class="eyebrow">{{ game.game_dt | gamedt }}</div>
-      <h1 style="margin:0;">vs {{ game.opponent or "TBD" }}</h1>
+      <h1 style="margin:0;">{{ matchup(game) }}</h1>
     </div>
     <div style="margin-left:auto;display:flex;gap:8px;">
       <a class="btn small outline" href="{{ url_for('game_edit', game_id=game.id) }}">Edit game</a>

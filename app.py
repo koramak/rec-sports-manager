@@ -2,6 +2,7 @@
 import csv
 import io
 import os
+import re
 import threading
 from datetime import datetime
 from functools import wraps
@@ -17,21 +18,23 @@ app.secret_key = os.environ.get("REC_SECRET", "dev-secret-change-me")
 
 POSITIONS = ["P", "C", "1B", "2B", "3B", "SS", "OF"]
 STATUSES = ["in", "out", "tbd"]
+SKILLS = ["competitive", "intermediate", "beginner"]
+
+app.template_filter("gamedt")(notify.fmt_gamedt)
+app.template_filter("fmtdate")(notify.fmt_date)
 
 
-@app.template_filter("gamedt")
-def fmt_gamedt(s):
-    """'2026-07-09 18:30' -> 'Thu Jul 9 · 6:30 PM'"""
-    d = datetime.strptime(s, notify.DT_FMT)
-    t = d.strftime("%I:%M %p").lstrip("0")
-    return "%s %s %d · %s" % (d.strftime("%a"), d.strftime("%b"), d.day, t)
-
-
-@app.template_filter("fmtdate")
-def fmt_date(s):
-    """'2026-08-08' -> 'Sat Aug 8'"""
-    d = datetime.strptime(s, notify.D_FMT)
-    return "%s %s %d" % (d.strftime("%a"), d.strftime("%b"), d.day)
+def normalize_phone(raw):
+    """US numbers only (+1). Returns '(555) 555-0101', '' for empty,
+    or None when the input isn't a valid 10-digit number."""
+    digits = re.sub(r"\D", "", raw or "")
+    if not digits:
+        return ""
+    if len(digits) == 11 and digits.startswith("1"):
+        digits = digits[1:]
+    if len(digits) != 10:
+        return None
+    return "(%s) %s-%s" % (digits[:3], digits[3:6], digits[6:])
 
 
 def short_bits(con, game, team):
@@ -138,7 +141,7 @@ def inject_globals():
             "SELECT COUNT(*) c FROM alerts WHERE user_id=? AND is_read=0",
             (u["id"],)).fetchone()["c"]
     return {"user": u, "unread_alerts": unread, "short_name": db.short_name,
-            "POSITIONS": POSITIONS}
+            "POSITIONS": POSITIONS, "SKILLS": SKILLS, "matchup": notify.matchup}
 
 
 # ------------------------------------------------------------ auth
@@ -156,16 +159,18 @@ def signup():
         name = request.form["name"].strip()
         email = request.form["email"].strip().lower()
         password = request.form["password"]
+        phone = normalize_phone(request.form.get("phone", ""))
         if not (name and email and password):
             flash("All fields are required.")
+        elif phone is None:
+            flash("Phone must be a 10-digit US number (country code +1).")
         elif get_con().execute("SELECT 1 FROM users WHERE email=?", (email,)).fetchone():
             flash("That email is already registered.")
         else:
             con = get_con()
             cur = con.execute(
                 "INSERT INTO users (name, email, phone, password_hash) VALUES (?,?,?,?)",
-                (name, email, request.form.get("phone", "").strip(),
-                 db.hash_password(password)))
+                (name, email, phone, db.hash_password(password)))
             con.commit()
             session["uid"] = cur.lastrowid
             return redirect(url_for("dashboard"))
@@ -233,13 +238,15 @@ def team_new():
         con = get_con()
         tid = db.new_token(4)
         con.execute(
-            """INSERT INTO teams (id, name, sport, owner_id, min_players, min_male, min_female)
-               VALUES (?,?,?,?,?,?,?)""",
+            """INSERT INTO teams (id, name, sport, owner_id, min_players, min_male,
+                                  min_female, team_type)
+               VALUES (?,?,?,?,?,?,?,?)""",
             (tid, request.form["name"].strip(), request.form.get("sport", "").strip(),
              current_user()["id"],
              int(request.form.get("min_players") or 0),
              int(request.form.get("min_male") or 0),
-             int(request.form.get("min_female") or 0)))
+             int(request.form.get("min_female") or 0),
+             "tournament" if request.form.get("team_type") == "tournament" else "league"))
         con.commit()
         return redirect(url_for("team_manage", team_id=tid))
     return render_template("team_form.html", team=None, comanagers=[])
@@ -252,12 +259,14 @@ def team_settings(team_id):
     con = get_con()
     if request.method == "POST":
         con.execute(
-            """UPDATE teams SET name=?, sport=?, min_players=?, min_male=?, min_female=?
-               WHERE id=?""",
+            """UPDATE teams SET name=?, sport=?, min_players=?, min_male=?, min_female=?,
+                      team_type=? WHERE id=?""",
             (request.form["name"].strip(), request.form.get("sport", "").strip(),
              int(request.form.get("min_players") or 0),
              int(request.form.get("min_male") or 0),
-             int(request.form.get("min_female") or 0), team_id))
+             int(request.form.get("min_female") or 0),
+             "tournament" if request.form.get("team_type") == "tournament" else "league",
+             team_id))
         con.commit()
         flash("Team updated.")
         return redirect(url_for("team_manage", team_id=team_id))
@@ -323,17 +332,27 @@ def team_manage(team_id):
 # ------------------------------------------------------------ players
 
 def player_from_form(form):
+    """Returns (data, error). error is a message to flash, or None."""
     positions = ",".join(p for p in POSITIONS if form.get("pos_" + p))
-    return {
+    phone = normalize_phone(form.get("phone", ""))
+    error = None
+    if phone is None:
+        error = "Phone must be a 10-digit US number including area code (country code +1)."
+        phone = ""
+    skill = form.get("skill", "").strip().lower()
+    d = {
         "name": form["name"].strip(),
         "gender": form.get("gender", "M"),
-        "phone": form.get("phone", "").strip(),
+        "phone": phone,
         "email": form.get("email", "").strip(),
-        "number": form.get("number", "").strip(),
+        "number": "",
         "positions": positions,
-        "skill": form.get("skill", "").strip(),
+        "skill": skill if skill in SKILLS else "",
         "notes": form.get("notes", "").strip(),
     }
+    if not error and (not d["name"] or not (d["phone"] or d["email"])):
+        error = "Name and at least one contact method (phone or email) are required."
+    return d, error
 
 
 @app.route("/team/<team_id>/players/new", methods=["GET", "POST"])
@@ -341,9 +360,9 @@ def player_from_form(form):
 def player_new(team_id):
     team = get_team_or_404(team_id, manage=True)
     if request.method == "POST":
-        d = player_from_form(request.form)
-        if not d["name"] or not (d["phone"] or d["email"]):
-            flash("Name and at least one contact method (phone or email) are required.")
+        d, err = player_from_form(request.form)
+        if err:
+            flash(err)
             return render_template("player_form.html", team=team, player=None, is_sub=False)
         con = get_con()
         pid = db.new_token(5)
@@ -360,13 +379,13 @@ def player_new(team_id):
     return render_template("player_form.html", team=team, player=None, is_sub=False)
 
 
-@app.route("/subs/new", methods=["GET", "POST"])
+@app.route("/players/new", methods=["GET", "POST"])
 @login_required
 def sub_new():
     if request.method == "POST":
-        d = player_from_form(request.form)
-        if not d["name"] or not (d["phone"] or d["email"]):
-            flash("Name and at least one contact method (phone or email) are required.")
+        d, err = player_from_form(request.form)
+        if err:
+            flash(err)
             return render_template("player_form.html", team=None, player=None, is_sub=True)
         con = get_con()
         con.execute(
@@ -385,9 +404,9 @@ def sub_new():
 def player_edit(player_id):
     p = get_player_or_404(player_id, manage=True)
     if request.method == "POST":
-        d = player_from_form(request.form)
-        if not d["name"] or not (d["phone"] or d["email"]):
-            flash("Name and at least one contact method (phone or email) are required.")
+        d, err = player_from_form(request.form)
+        if err:
+            flash(err)
         else:
             con = get_con()
             con.execute(
@@ -425,14 +444,22 @@ def roster_remove(team_id, player_id):
     return redirect(url_for("team_manage", team_id=team_id))
 
 
-@app.route("/subs")
+@app.route("/players")
 @login_required
 def subs():
+    """All players across every team this manager owns or co-manages,
+    plus their unrostered sub pool."""
+    u = current_user()
     con = get_con()
-    pool = con.execute(
-        "SELECT * FROM players WHERE manager_id=? AND is_sub=1 ORDER BY name",
-        (current_user()["id"],)).fetchall()
-    return render_template("subs.html", pool=pool)
+    entries = {}
+    for t in my_teams(u):
+        for p in notify.rostered_players(con, t["id"]):
+            e = entries.setdefault(p["id"], {"player": p, "teams": []})
+            e["teams"].append(t["name"])
+    for p in con.execute("SELECT * FROM players WHERE manager_id=?", (u["id"],)):
+        entries.setdefault(p["id"], {"player": p, "teams": []})
+    items = sorted(entries.values(), key=lambda e: e["player"]["name"].lower())
+    return render_template("players.html", items=items)
 
 
 # ------------------------------------------------------------ import
@@ -453,7 +480,9 @@ def player_import(team_id):
         for row in reader:
             row = {(k or "").strip().lower(): (v or "").strip() for k, v in row.items()}
             name = row.get("name", "")
-            phone, email = row.get("phone", ""), row.get("email", "")
+            phone = normalize_phone(row.get("phone", "")) or ""
+            email = row.get("email", "")
+            skill = row.get("skill", "").strip().lower()
             if not name or not (phone or email):
                 skipped += 1
                 continue
@@ -461,10 +490,11 @@ def player_import(team_id):
             con.execute(
                 """INSERT INTO players (id, manager_id, name, gender, phone, email, number,
                                         positions, skill, notes, is_sub)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                   VALUES (?,?,?,?,?,?,'',?,?,?,?)""",
                 (pid, team["owner_id"], name, row.get("gender", "M")[:1].upper() or "M",
-                 phone, email, row.get("number", ""), row.get("positions", ""),
-                 row.get("skill", ""), row.get("notes", ""), 1 if as_subs else 0))
+                 phone, email, row.get("positions", ""),
+                 skill if skill in SKILLS else "", row.get("notes", ""),
+                 1 if as_subs else 0))
             if not as_subs:
                 con.execute("INSERT INTO team_players (team_id, player_id) VALUES (?,?)",
                             (team_id, pid))
@@ -479,7 +509,8 @@ def player_import(team_id):
 
 def game_form_values(form):
     return (form["date"] + " " + form["time"], form.get("location", "").strip(),
-            form.get("opponent", "").strip(), form.get("notes", "").strip())
+            form.get("opponent", "").strip(), form.get("notes", "").strip(),
+            "away" if form.get("home_away") == "away" else "home")
 
 
 @app.route("/team/<team_id>/games/new", methods=["GET", "POST"])
@@ -488,10 +519,11 @@ def game_new(team_id):
     team = get_team_or_404(team_id, manage=True)
     if request.method == "POST":
         con = get_con()
-        gdt, loc, opp, notes = game_form_values(request.form)
+        gdt, loc, opp, notes, home_away = game_form_values(request.form)
         con.execute(
-            "INSERT INTO games (team_id, game_dt, location, opponent, notes) VALUES (?,?,?,?,?)",
-            (team_id, gdt, loc, opp, notes))
+            "INSERT INTO games (team_id, game_dt, location, opponent, notes, home_away)"
+            " VALUES (?,?,?,?,?,?)",
+            (team_id, gdt, loc, opp, notes, home_away))
         con.commit()
         return redirect(url_for("team_manage", team_id=team_id))
     return render_template("game_form.html", team=team, game=None)
@@ -506,9 +538,9 @@ def game_edit(game_id):
         abort(404)
     team = get_team_or_404(game["team_id"], manage=True)
     if request.method == "POST":
-        gdt, loc, opp, notes = game_form_values(request.form)
-        con.execute("UPDATE games SET game_dt=?, location=?, opponent=?, notes=? WHERE id=?",
-                    (gdt, loc, opp, notes, game_id))
+        gdt, loc, opp, notes, home_away = game_form_values(request.form)
+        con.execute("UPDATE games SET game_dt=?, location=?, opponent=?, notes=?, home_away=?"
+                    " WHERE id=?", (gdt, loc, opp, notes, home_away, game_id))
         con.commit()
         flash("Game updated.")
         return redirect(url_for("game_view", game_id=game_id))
@@ -546,9 +578,13 @@ def game_view(game_id):
         """SELECT s.*, p.name, p.gender FROM sub_invites s
            JOIN players p ON p.id=s.player_id WHERE s.game_id=?""", (game_id,)).fetchall()
     invited_ids = {s["player_id"] for s in sub_rows}
+    roster_ids = {p["id"] for p in roster}
+    # sub pool varies per team: anyone in this manager's player pool who
+    # isn't already on this team's roster
     pool = [p for p in con.execute(
-        "SELECT * FROM players WHERE manager_id=? AND is_sub=1 ORDER BY name",
-        (team["owner_id"],)).fetchall() if p["id"] not in invited_ids]
+        "SELECT * FROM players WHERE manager_id=? ORDER BY name",
+        (team["owner_id"],)).fetchall()
+        if p["id"] not in invited_ids and p["id"] not in roster_ids]
     return render_template("game.html", team=team, game=game, rows=rows,
                            counts=notify.game_counts(con, game),
                            short=short_bits(con, game, team),
@@ -664,7 +700,7 @@ def tournament_invite(tournament_id):
             " VALUES (?,?,?)", (tournament_id, pid, now.strftime(notify.DT_FMT)))
         notify.send_now(con, p,
             "Tournament invite: %s on %s at %s (%s, ~$%s/person). RSVP: %s"
-            % (t["name"], t["date"], t["location"] or "TBD", t["division"],
+            % (t["name"], notify.fmt_date(t["date"]), t["location"] or "TBD", t["division"],
                t["cost"] or "?", notify.player_link(team["id"], pid)), now)
     con.commit()
     flash("Invite(s) sent.")
@@ -694,14 +730,23 @@ def outbox():
         rows = con.execute(
             "SELECT * FROM notifications ORDER BY created_at DESC LIMIT 200").fetchall()
     else:
+        # the manager's players' messages, plus alert SMS sent to the manager
         rows = con.execute(
             """SELECT DISTINCT n.* FROM notifications n
                WHERE n.contact IN (
                  SELECT CASE WHEN TRIM(COALESCE(p.phone,''))<>'' THEN TRIM(p.phone)
                              ELSE LOWER(TRIM(COALESCE(p.email,''))) END
                  FROM players p WHERE p.manager_id=?)
-               ORDER BY n.created_at DESC LIMIT 200""", (u["id"],)).fetchall()
+                 OR n.contact IN (?, ?)
+               ORDER BY n.created_at DESC LIMIT 200""",
+            (u["id"], (u["phone"] or "").strip(),
+             (u["email"] or "").strip().lower())).fetchall()
     return render_template("outbox.html", rows=rows)
+
+
+@app.route("/donate")
+def donate():
+    return render_template("donate.html")
 
 
 @app.route("/admin")

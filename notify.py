@@ -23,6 +23,28 @@ def parse_d(s):
     return datetime.strptime(s, D_FMT)
 
 
+def fmt_gamedt(s):
+    """'2026-07-06 19:00' -> 'Mon, Jul 6 · 7:00 PM' (dates always 'ddd, MMM d')."""
+    d = parse_dt(s)
+    t = d.strftime("%I:%M %p").lstrip("0")
+    return "%s, %s %d · %s" % (d.strftime("%a"), d.strftime("%b"), d.day, t)
+
+
+def fmt_date(s):
+    """'2026-08-08' -> 'Sat, Aug 8'."""
+    d = parse_d(s)
+    return "%s, %s %d" % (d.strftime("%a"), d.strftime("%b"), d.day)
+
+
+def matchup(game):
+    """'vs Opponent' at home, '@ Opponent' away."""
+    try:
+        away = game["home_away"] == "away"
+    except (KeyError, IndexError):
+        away = False
+    return "%s %s" % ("@" if away else "vs", game["opponent"] or "TBD")
+
+
 def contact_key(player):
     """Players are matched across teams/managers by contact info."""
     return (player["phone"] or "").strip() or (player["email"] or "").strip().lower()
@@ -116,11 +138,24 @@ def team_manager_ids(con, team):
 
 
 def alert_managers(con, team, kind, message, now):
+    """In-app alert plus an SMS to each manager (email fallback), via the outbox."""
     for uid in team_manager_ids(con, team):
         con.execute(
             "INSERT INTO alerts (user_id, team_id, kind, message, created_at)"
             " VALUES (?,?,?,?,?)",
             (uid, team["id"], kind, message, now.strftime(DT_FMT)),
+        )
+        u = con.execute("SELECT * FROM users WHERE id=?", (uid,)).fetchone()
+        if not u:
+            continue
+        contact = (u["phone"] or "").strip() or (u["email"] or "").strip().lower()
+        if not contact:
+            continue
+        channel = "sms" if (u["phone"] or "").strip() else "email"
+        con.execute(
+            "INSERT INTO notifications (contact, channel, recipient, body, created_at)"
+            " VALUES (?,?,?,?,?)",
+            (contact, channel, u["name"], message, now.strftime(DT_FMT)),
         )
 
 
@@ -157,8 +192,8 @@ def log_reminder(con, event_type, event_id, player_id, now):
 
 
 def game_line(team, game):
-    return "%s vs %s on %s at %s" % (
-        team["name"], game["opponent"] or "TBD", game["game_dt"], game["location"] or "TBD")
+    return "%s %s on %s at %s" % (
+        team["name"], matchup(game), fmt_gamedt(game["game_dt"]), game["location"] or "TBD")
 
 
 # ---------------------------------------------------------------- the tick
@@ -242,7 +277,7 @@ def run_tick(con, now=None):
             if reminded_today(con, "tournament", t["id"], p["id"], now):
                 continue
             outbox.add(p, "Reminder — RSVP for tournament %s on %s (%s, ~$%s/person): %s" % (
-                t["name"], t["date"], t["division"], t["cost"] or "?",
+                t["name"], fmt_date(t["date"]), t["division"], t["cost"] or "?",
                 player_link(team["id"], p["id"])))
             log_reminder(con, "tournament", t["id"], p["id"], now)
 

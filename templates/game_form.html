@@ -24,8 +24,19 @@
              value="{{ game.game_dt.split(' ')[1] if game else '19:00' }}">
     </div>
   </div>
-  <label>Opponent</label>
-  <input type="text" name="opponent" value="{{ game.opponent if game else '' }}">
+  <div class="row2">
+    <div>
+      <label>Opponent</label>
+      <input type="text" name="opponent" value="{{ game.opponent if game else '' }}">
+    </div>
+    <div>
+      <label>Home / away</label>
+      <select name="home_away">
+        <option value="home" {% if game and game.home_away == 'home' %}selected{% endif %}>Home</option>
+        <option value="away" {% if game and game.home_away == 'away' %}selected{% endif %}>Away</option>
+      </select>
+    </div>
+  </div>
   <label>Location</label>
   <input type="text" name="location" value="{{ game.location if game else '' }}">
   <label>Notes <span class="opt">— optional</span></label>

@@ -16,7 +16,7 @@
 {% for gi in game_items %}
   <div class="card">
     <div class="eyebrow">{{ gi.game.game_dt | gamedt }}</div>
-    <div class="card-title" style="margin:2px 0;">vs {{ gi.game.opponent or "TBD" }}</div>
+    <div class="card-title" style="margin:2px 0;">{{ matchup(gi.game) }}</div>
     <div class="sub">📍 {{ gi.game.location or "Location TBD" }}{% if gi.game.notes %} · {{ gi.game.notes }}{% endif %}</div>
     <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">
       <input type="hidden" name="event_type" value="game">
@@ -70,4 +70,6 @@
     </details>
   </div>
 {% endfor %}
+
+<p class="sub center" style="margin-top:22px;">Enjoying RecMgr? <a href="{{ url_for('donate') }}" style="color:var(--ink);font-weight:700;">Donate</a> to keep it running.</p>
 {% endblock %}

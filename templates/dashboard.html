@@ -14,7 +14,7 @@
           <div class="card-body">
             <h3><a href="{{ url_for('team_manage', team_id=c.team.id) }}">{{ c.team.name }}</a></h3>
             {% if c.next %}
-              <div class="meta-line">{{ c.next.game.game_dt | gamedt }} vs
+              <div class="meta-line">{{ c.next.game.game_dt | gamedt }} {{ "@" if c.next.game.home_away == "away" else "vs" }}
                 <strong>{{ c.next.game.opponent or "TBD" }}</strong></div>
               <div style="display:flex;align-items:baseline;gap:10px;">
                 <div class="headnum">{{ c.next.counts.total }}<span class="denom">/{{ c.team.min_players }}</span></div>

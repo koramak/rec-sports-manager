@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS teams (
     name TEXT NOT NULL,
     sport TEXT DEFAULT 'Softball',
     owner_id INTEGER NOT NULL REFERENCES users(id),
-    min_players INTEGER NOT NULL DEFAULT 8,
-    min_male INTEGER NOT NULL DEFAULT 0,
-    min_female INTEGER NOT NULL DEFAULT 0
+    min_players INTEGER NOT NULL DEFAULT 10,
+    min_male INTEGER NOT NULL DEFAULT 7,
+    min_female INTEGER NOT NULL DEFAULT 3,
+    team_type TEXT NOT NULL DEFAULT 'league'   -- 'league' | 'tournament'
 );
 
 -- co-managers (owner is implicitly a manager of the team)
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS games (
     location TEXT,
     opponent TEXT,
     notes TEXT,
+    home_away TEXT NOT NULL DEFAULT 'home',    -- 'home' | 'away'
     rsvp_opened INTEGER NOT NULL DEFAULT 0,
     alert72_sent INTEGER NOT NULL DEFAULT 0
 );
@@ -138,9 +140,21 @@ def connect():
     return con
 
 
+def _migrate(con):
+    """Add columns introduced after the first release to existing DBs."""
+    for table, col, ddl in [
+        ("teams", "team_type", "ALTER TABLE teams ADD COLUMN team_type TEXT NOT NULL DEFAULT 'league'"),
+        ("games", "home_away", "ALTER TABLE games ADD COLUMN home_away TEXT NOT NULL DEFAULT 'home'"),
+    ]:
+        cols = [r["name"] for r in con.execute("PRAGMA table_info(%s)" % table)]
+        if col not in cols:
+            con.execute(ddl)
+
+
 def init_db():
     con = connect()
     con.executescript(SCHEMA)
+    _migrate(con)
     # seed the system admin if missing
     if not con.execute("SELECT 1 FROM users WHERE role='admin'").fetchone():
         con.execute(

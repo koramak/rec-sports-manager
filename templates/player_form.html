@@ -23,12 +23,18 @@
       </select>
     </div>
     <div>
-      <label>Number <span class="opt">— optional</span></label>
-      <input type="text" name="number" value="{{ player.number if player else '' }}">
+      <label>Skill level <span class="opt">— optional</span></label>
+      <select name="skill">
+        <option value="">—</option>
+        {% for s in SKILLS %}
+          <option value="{{ s }}" {% if player and player.skill == s %}selected{% endif %}>{{ s | capitalize }}</option>
+        {% endfor %}
+      </select>
     </div>
   </div>
-  <label>Phone <span class="opt">— phone or email required</span></label>
-  <input type="tel" name="phone" value="{{ player.phone if player else '' }}">
+  <label>Phone <span class="opt">— 10 digits, US (+1); phone or email required</span></label>
+  <input type="tel" name="phone" value="{{ player.phone if player else '' }}"
+         placeholder="(555) 555-0123" inputmode="tel">
   <label>Email</label>
   <input type="email" name="email" value="{{ player.email if player else '' }}">
   <label>Positions <span class="opt">— optional</span></label>
@@ -38,8 +44,6 @@
       <label style="margin:0;"><input type="checkbox" name="pos_{{ pos }}" {% if pos in current %}checked{% endif %}> {{ pos }}</label>
     {% endfor %}
   </div>
-  <label>Skill level <span class="opt">— optional</span></label>
-  <input type="text" name="skill" value="{{ player.skill if player else '' }}" placeholder="e.g. A, B, C, Rec">
   <label>Notes <span class="opt">— optional</span></label>
   <textarea name="notes">{{ player.notes if player else '' }}</textarea>
   <button class="btn primary block" type="submit">Save</button>

@@ -27,7 +27,7 @@ def d(days):
 # manager
 cur = con.execute(
     "INSERT INTO users (name, email, phone, password_hash) VALUES (?,?,?,?)",
-    ("Zane Miller", "zane@example.com", "555-0100", db.hash_password("demo")))
+    ("Zane Miller", "zane@example.com", "(555) 555-0100", db.hash_password("demo")))
 manager_id = cur.lastrowid
 
 # team
@@ -38,17 +38,17 @@ con.execute(
     (team_id, "Brew Crew", "Coed Softball", manager_id, 10, 5, 4))
 
 ROSTER = [
-    ("Dave Miller", "M", "555-0101", "", "7", "P,SS", "B", ""),
-    ("Sara Ortiz", "F", "555-0102", "", "12", "C,2B", "A", ""),
-    ("Mike Chen", "M", "555-0103", "", "23", "OF", "B", ""),
-    ("Jess Park", "F", "", "jess@example.com", "3", "1B", "B", "prefers infield"),
-    ("Tom Alvarez", "M", "555-0105", "", "9", "3B,OF", "C", ""),
-    ("Amy Rhodes", "F", "555-0106", "", "18", "OF", "B", ""),
-    ("Luis Gomez", "M", "555-0107", "", "5", "SS,2B", "A", ""),
-    ("Nina Patel", "F", "555-0108", "", "21", "OF,C", "C", ""),
-    ("Ray Johnson", "M", "555-0109", "", "44", "1B,P", "B", ""),
-    ("Kate Wu", "F", "555-0110", "", "8", "2B", "B", ""),
-    ("Ben Foster", "M", "555-0111", "", "2", "OF", "C", ""),
+    ("Dave Miller", "M", "(555) 555-0101", "", "7", "P,SS", "intermediate", ""),
+    ("Sara Ortiz", "F", "(555) 555-0102", "", "12", "C,2B", "competitive", ""),
+    ("Mike Chen", "M", "(555) 555-0103", "", "23", "OF", "intermediate", ""),
+    ("Jess Park", "F", "", "jess@example.com", "3", "1B", "intermediate", "prefers infield"),
+    ("Tom Alvarez", "M", "(555) 555-0105", "", "9", "3B,OF", "beginner", ""),
+    ("Amy Rhodes", "F", "(555) 555-0106", "", "18", "OF", "intermediate", ""),
+    ("Luis Gomez", "M", "(555) 555-0107", "", "5", "SS,2B", "competitive", ""),
+    ("Nina Patel", "F", "(555) 555-0108", "", "21", "OF,C", "beginner", ""),
+    ("Ray Johnson", "M", "(555) 555-0109", "", "44", "1B,P", "intermediate", ""),
+    ("Kate Wu", "F", "(555) 555-0110", "", "8", "2B", "intermediate", ""),
+    ("Ben Foster", "M", "(555) 555-0111", "", "2", "OF", "beginner", ""),
 ]
 player_ids = []
 for name, g, phone, email, num, pos, skill, notes_ in ROSTER:
@@ -61,10 +61,10 @@ for name, g, phone, email, num, pos, skill, notes_ in ROSTER:
     con.execute("INSERT INTO team_players (team_id, player_id) VALUES (?,?)", (team_id, pid))
 
 SUBS = [
-    ("Carlos Vega", "M", "555-0201", "", "P,OF", "A"),
-    ("Dana Kim", "F", "555-0202", "", "C,1B", "B"),
-    ("Erin Walsh", "F", "", "erin@example.com", "OF", "B"),
-    ("Frank Ito", "M", "555-0204", "", "SS", "A"),
+    ("Carlos Vega", "M", "(555) 555-0201", "", "P,OF", "competitive"),
+    ("Dana Kim", "F", "(555) 555-0202", "", "C,1B", "intermediate"),
+    ("Erin Walsh", "F", "", "erin@example.com", "OF", "intermediate"),
+    ("Frank Ito", "M", "(555) 555-0204", "", "SS", "competitive"),
 ]
 for name, g, phone, email, pos, skill in SUBS:
     con.execute(
@@ -78,8 +78,8 @@ cur = con.execute(
     (team_id, dt(2), "Riverside Field #3", "The Mashers"))
 game_soon = cur.lastrowid
 con.execute(
-    "INSERT INTO games (team_id, game_dt, location, opponent) VALUES (?,?,?,?)",
-    (team_id, dt(9), "Riverside Field #1", "Pitch Slap"))
+    "INSERT INTO games (team_id, game_dt, location, opponent, home_away) VALUES (?,?,?,?,?)",
+    (team_id, dt(9), "Eastside Complex #2", "Pitch Slap", "away"))
 
 # some RSVPs for the near game: 6 in (4M/2F) -> short vs 10 total / 5M / 4F
 ts = now.strftime(notify.DT_FMT)

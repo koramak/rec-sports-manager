@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Sub request — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <div class="pb-text"><div class="pb-title">{{ team.name }}</div></div>
+</div>
+{% endblock %}
 {% block content %}
-<div class="auth-wrap card">
-  <h1>Hi {{ player.name.split(' ')[0] }} 👋</h1>
-  <p><strong>{{ team.name }}</strong> needs a sub:</p>
-  <p>
-    🗓 {{ game.game_dt }}<br>
-    🆚 {{ game.opponent or "TBD" }}<br>
-    📍 {{ game.location or "Location TBD" }}
-    {% if game.notes %}<br>📝 {{ game.notes }}{% endif %}
-  </p>
-  <form method="post">
-    <div class="rsvp-buttons">
-      <button name="status" value="in"  class="{{ 'sel-in'  if inv.status == 'in'  else '' }}">IN</button>
-      <button name="status" value="out" class="{{ 'sel-out' if inv.status == 'out' else '' }}">OUT</button>
-      <button name="status" value="tbd" class="{{ 'sel-tbd' if inv.status == 'tbd' else '' }}">T.B.D.</button>
-    </div>
-  </form>
-  {% if inv.status != 'tbd' %}
-    <p class="sub center">Your current answer: <span class="status-pill status-{{ inv.status }}">{{ inv.status | upper }}</span></p>
-  {% endif %}
+<div class="auth-wrap">
+  <h1 style="letter-spacing:0.03em;">Hi {{ player.name.split(' ')[0] }} 👋</h1>
+  <p class="meta-line"><strong>{{ team.name }}</strong> needs a sub:</p>
+  <div class="card">
+    <div class="eyebrow">{{ game.game_dt | gamedt }}</div>
+    <div class="card-title" style="margin:2px 0;">vs {{ game.opponent or "TBD" }}</div>
+    <div class="sub">📍 {{ game.location or "Location TBD" }}{% if game.notes %} · {{ game.notes }}{% endif %}</div>
+    <form method="post">
+      <div class="rsvp-buttons">
+        <button name="status" value="in"  class="{{ 'sel-in'  if inv.status == 'in'  else '' }}">IN</button>
+        <button name="status" value="out" class="{{ 'sel-out' if inv.status == 'out' else '' }}">OUT</button>
+        <button name="status" value="tbd" class="{{ 'sel-tbd' if inv.status == 'tbd' else '' }}">T.B.D.</button>
+      </div>
+    </form>
+    {% if inv.status != 'tbd' %}
+      <p class="sub center" style="margin-bottom:0;">Your answer: <span class="status-pill status-{{ inv.status }}">{{ inv.status | upper }}</span></p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

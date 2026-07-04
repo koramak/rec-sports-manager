@@ -1,34 +1,42 @@
 {% extends "base.html" %}
-{% block title %}{{ "Edit game" if game else "New game" }} — RecMgr{% endblock %}
-{% block content %}
-<h1>{{ "Edit game" if game else "New game" }} — {{ team.name }}</h1>
-<div class="card">
-  <form method="post" class="stack">
-    <div class="row2">
-      <div>
-        <label>Date *</label>
-        <input type="date" name="date" required
-               value="{{ game.game_dt.split(' ')[0] if game else '' }}">
-      </div>
-      <div>
-        <label>Time *</label>
-        <input type="time" name="time" required
-               value="{{ game.game_dt.split(' ')[1] if game else '19:00' }}">
-      </div>
-    </div>
-    <label>Location</label>
-    <input type="text" name="location" value="{{ game.location if game else '' }}">
-    <label>Opponent</label>
-    <input type="text" name="opponent" value="{{ game.opponent if game else '' }}">
-    <label>Notes</label>
-    <textarea name="notes">{{ game.notes if game else '' }}</textarea>
-    <button class="btn block" type="submit">Save game</button>
-  </form>
+{% block title %}{{ "Edit game" if game else "Add game" }} — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ url_for('game_view', game_id=game.id) if game else url_for('team_manage', team_id=team.id) }}">←</a>
+  <div class="pb-text"><div class="pb-title">{{ "Edit game" if game else "Add game" }}</div></div>
 </div>
+{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+<h1 class="desk-title">{{ "Edit game" if game else "Add game" }} <span class="count">{{ team.name }}</span></h1>
+<form method="post" class="stack">
+  <div class="row2">
+    <div>
+      <label>Date</label>
+      <input type="date" name="date" required
+             value="{{ game.game_dt.split(' ')[0] if game else '' }}">
+    </div>
+    <div>
+      <label>Time</label>
+      <input type="time" name="time" required
+             value="{{ game.game_dt.split(' ')[1] if game else '19:00' }}">
+    </div>
+  </div>
+  <label>Opponent</label>
+  <input type="text" name="opponent" value="{{ game.opponent if game else '' }}">
+  <label>Location</label>
+  <input type="text" name="location" value="{{ game.location if game else '' }}">
+  <label>Notes <span class="opt">— optional</span></label>
+  <textarea name="notes">{{ game.notes if game else '' }}</textarea>
+  <button class="btn primary block" type="submit">Save game</button>
+</form>
+<a class="cancel-link" href="{{ url_for('game_view', game_id=game.id) if game else url_for('team_manage', team_id=team.id) }}">Cancel</a>
 {% if game %}
 <form method="post" action="{{ url_for('game_delete', game_id=game.id) }}"
-      onsubmit="return confirm('Delete this game and its RSVPs?')">
+      onsubmit="return confirm('Delete this game and its RSVPs?')" style="margin-top:22px;">
   <button class="btn danger block" type="submit">Delete game</button>
 </form>
 {% endif %}
+</div>
 {% endblock %}

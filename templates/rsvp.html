@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 {% block title %}{{ team.name }} — RSVP{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <div class="pb-text"><div class="pb-title">{{ team.name }}</div></div>
+</div>
+{% endblock %}
 {% block content %}
-<h1>Hi {{ player.name.split(' ')[0] }} 👋</h1>
-<p class="sub">{{ team.name }} · not you? <a href="{{ url_for('team_landing', team_id=team.id) }}">pick your name</a></p>
+<div style="margin-bottom:14px;">
+  <h1 style="margin:0;letter-spacing:0.03em;">Hi {{ player.name.split(' ')[0] }} 👋</h1>
+  <div class="sub">Not you? <a href="{{ url_for('team_landing', team_id=team.id) }}" style="color:var(--ink);font-weight:700;">Pick your name</a></div>
+</div>
 
-<h2>Games</h2>
 {% for gi in game_items %}
   <div class="card">
-    <h3>{{ gi.game.game_dt }} vs {{ gi.game.opponent or "TBD" }}</h3>
+    <div class="eyebrow">{{ gi.game.game_dt | gamedt }}</div>
+    <div class="card-title" style="margin:2px 0;">vs {{ gi.game.opponent or "TBD" }}</div>
     <div class="sub">📍 {{ gi.game.location or "Location TBD" }}{% if gi.game.notes %} · {{ gi.game.notes }}{% endif %}</div>
     <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">
       <input type="hidden" name="event_type" value="game">
@@ -18,30 +26,27 @@
         <button name="status" value="tbd" class="{{ 'sel-tbd' if gi.mine == 'tbd' else '' }}">T.B.D.</button>
       </div>
     </form>
-    <details style="margin-top:10px;">
-      <summary class="sub">Who's in ({{ gi.responses | selectattr('status', 'equalto', 'in') | list | length }})</summary>
-      <table class="list">
+    <details class="whos-in">
+      <summary>Who's in <span class="count-pill">{{ gi.responses | selectattr('status', 'equalto', 'in') | list | length }}</span></summary>
+      <div class="list-rows" style="margin-top:8px;">
         {% for r in gi.responses %}
-          <tr>
-            <td>{{ short_name(r.name) }}</td>
-            <td class="right"><span class="status-pill status-{{ r.status or 'tbd' }}">{{ (r.status or 'tbd') | upper }}</span></td>
-          </tr>
+          <div class="list-row">
+            <div class="lr-main"><div class="lr-name">{{ short_name(r.name) }}</div></div>
+            <span class="status-pill status-{{ r.status or 'tbd' }}">{{ (r.status or 'tbd') | upper }}</span>
+          </div>
         {% endfor %}
-      </table>
+      </div>
     </details>
   </div>
 {% else %}
   <div class="card"><p class="sub">No upcoming games.</p></div>
 {% endfor %}
 
-{% if t_items %}
-<h2>Tournaments</h2>
 {% for ti in t_items %}
   <div class="card">
-    <h3>{{ ti.t.name }}</h3>
-    <div class="sub">{{ ti.t.date }} · {{ ti.t.division }} · 📍 {{ ti.t.location or "TBD" }}
-      {% if ti.t.host %}· hosted by {{ ti.t.host }}{% endif %}
-      {% if ti.t.cost %}· ~${{ "%.0f" | format(ti.t.cost) }}/person{% endif %}</div>
+    <div class="eyebrow">Tournament · {{ ti.t.date | fmtdate }}</div>
+    <div class="card-title" style="margin:2px 0;">{{ ti.t.name }}</div>
+    <div class="sub">{{ ti.t.division }} · {{ ti.t.location or "Location TBD" }}{% if ti.t.host %} · hosted by {{ ti.t.host }}{% endif %}{% if ti.t.cost %} · ~${{ "%.0f" | format(ti.t.cost) }}/person{% endif %}</div>
     <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">
       <input type="hidden" name="event_type" value="tournament">
       <input type="hidden" name="event_id" value="{{ ti.t.id }}">
@@ -51,18 +56,17 @@
         <button name="status" value="tbd" class="{{ 'sel-tbd' if ti.mine == 'tbd' else '' }}">T.B.D.</button>
       </div>
     </form>
-    <details style="margin-top:10px;">
-      <summary class="sub">Who's in ({{ ti.responses | selectattr('status', 'equalto', 'in') | list | length }})</summary>
-      <table class="list">
+    <details class="whos-in">
+      <summary>Who's in <span class="count-pill">{{ ti.responses | selectattr('status', 'equalto', 'in') | list | length }}</span></summary>
+      <div class="list-rows" style="margin-top:8px;">
         {% for r in ti.responses %}
-          <tr>
-            <td>{{ short_name(r.name) }}</td>
-            <td class="right"><span class="status-pill status-{{ r.status or 'tbd' }}">{{ (r.status or 'tbd') | upper }}</span></td>
-          </tr>
+          <div class="list-row">
+            <div class="lr-main"><div class="lr-name">{{ short_name(r.name) }}</div></div>
+            <span class="status-pill status-{{ r.status or 'tbd' }}">{{ (r.status or 'tbd') | upper }}</span>
+          </div>
         {% endfor %}
-      </table>
+      </div>
     </details>
   </div>
 {% endfor %}
-{% endif %}
 {% endblock %}

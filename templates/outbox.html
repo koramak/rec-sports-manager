@@ -2,11 +2,12 @@
 {% block title %}Outbox — RecMgr{% endblock %}
 {% block content %}
 <h1>Notification outbox</h1>
-<p class="sub">Every message the system sent to your players (SMS/email gateway stub). Messages to a player on multiple teams are batched into one.</p>
+<p class="sub" style="margin-top:-8px;margin-bottom:14px;">Every message the system sent to your players. Messages to a player on multiple teams are batched into one.</p>
 {% for n in rows %}
   <div class="card">
-    <div class="sub">{{ n.created_at }} · {{ n.channel | upper }} → {{ n.recipient }} ({{ n.contact }})</div>
-    <p class="notif">{{ n.body }}</p>
+    <div class="eyebrow" style="color:var(--muted2);">{{ n.channel }} → {{ n.recipient }}</div>
+    <p class="notif" style="margin:6px 0 4px;">{{ n.body }}</p>
+    <div class="when" style="font-size:12px;color:var(--muted2);font-weight:600;">{{ n.created_at }} · {{ n.contact }}</div>
   </div>
 {% else %}
   <div class="card"><p class="sub">Nothing sent yet. The scheduler sends RSVP requests, daily reminders and tournament reminders automatically.</p></div>

@@ -4,22 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Rec Sports Manager{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="{% block bodyclass %}{% endblock %}">
 <header class="topbar">
   <a class="brand" href="{{ url_for('index') }}">🥎 RecMgr</a>
+  {% if user %}
   <nav>
-    {% if user %}
-      <a href="{{ url_for('dashboard') }}">Teams</a>
-      <a href="{{ url_for('subs') }}">Subs</a>
-      <a href="{{ url_for('alerts') }}">Alerts{% if unread_alerts %} <span class="badge">{{ unread_alerts }}</span>{% endif %}</a>
-      <a href="{{ url_for('outbox') }}">Outbox</a>
-      {% if user.role == 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% endif %}
-      <a href="{{ url_for('logout') }}">Log out</a>
-    {% endif %}
+    <a href="{{ url_for('dashboard') }}" class="desk-only {% if request.path == '/dashboard' %}active{% endif %}">Teams</a>
+    <a href="{{ url_for('subs') }}" {% if request.path == '/subs' %}class="active"{% endif %}>Subs</a>
+    <a href="{{ url_for('alerts') }}" {% if request.path == '/alerts' %}class="active"{% endif %}>Alerts{% if unread_alerts %} <span class="badge">{{ unread_alerts }}</span>{% endif %}</a>
+    <a href="{{ url_for('outbox') }}" {% if request.path == '/outbox' %}class="active"{% endif %}>Outbox</a>
+    {% if user.role == 'admin' %}<a href="{{ url_for('admin') }}" {% if request.path == '/admin' %}class="active"{% endif %}>Admin</a>{% endif %}
+    <a href="{{ url_for('logout') }}">Log out</a>
   </nav>
+  <div class="whoami">{{ user.email }} · <a href="{{ url_for('logout') }}">Log out</a></div>
+  {% endif %}
 </header>
+{% block pagebar %}{% endblock %}
 <main>
   {% with messages = get_flashed_messages() %}
     {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}

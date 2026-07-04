@@ -19,6 +19,35 @@ POSITIONS = ["P", "C", "1B", "2B", "3B", "SS", "OF"]
 STATUSES = ["in", "out", "tbd"]
 
 
+@app.template_filter("gamedt")
+def fmt_gamedt(s):
+    """'2026-07-09 18:30' -> 'Thu Jul 9 · 6:30 PM'"""
+    d = datetime.strptime(s, notify.DT_FMT)
+    t = d.strftime("%I:%M %p").lstrip("0")
+    return "%s %s %d · %s" % (d.strftime("%a"), d.strftime("%b"), d.day, t)
+
+
+@app.template_filter("fmtdate")
+def fmt_date(s):
+    """'2026-08-08' -> 'Sat Aug 8'"""
+    d = datetime.strptime(s, notify.D_FMT)
+    return "%s %s %d" % (d.strftime("%a"), d.strftime("%b"), d.day)
+
+
+def short_bits(con, game, team):
+    """Shortfall for the status strips: {'more': 1, 'genders': '1F'} or None."""
+    c = notify.game_counts(con, game)
+    more = max(0, team["min_players"] - c["total"])
+    genders = []
+    if team["min_male"] and c["male"] < team["min_male"]:
+        genders.append("%dM" % (team["min_male"] - c["male"]))
+    if team["min_female"] and c["female"] < team["min_female"]:
+        genders.append("%dF" % (team["min_female"] - c["female"]))
+    if not more and not genders:
+        return None
+    return {"more": more, "genders": " · ".join(genders)}
+
+
 # ------------------------------------------------------------ plumbing
 
 def get_con():
@@ -179,9 +208,12 @@ def dashboard():
         if game:
             info = {"game": game,
                     "counts": notify.game_counts(con, game),
-                    "problems": notify.game_shortfall(con, game, t)}
+                    "short": short_bits(con, game, t)}
         cards.append({"team": t, "next": info})
-    return render_template("dashboard.html", cards=cards)
+    recent_alerts = con.execute(
+        "SELECT * FROM alerts WHERE user_id=? ORDER BY created_at DESC LIMIT 6",
+        (u["id"],)).fetchall()
+    return render_template("dashboard.html", cards=cards, recent_alerts=recent_alerts)
 
 
 @app.route("/tick", methods=["POST"])
@@ -278,7 +310,7 @@ def team_manage(team_id):
         "SELECT * FROM games WHERE team_id=? AND game_dt<? ORDER BY game_dt DESC LIMIT 5",
         (team_id, now)).fetchall()
     game_infos = [{"game": gm, "counts": notify.game_counts(con, gm),
-                   "problems": notify.game_shortfall(con, gm, team)} for gm in games]
+                   "short": short_bits(con, gm, team)} for gm in games]
     tournaments = con.execute(
         "SELECT * FROM tournaments WHERE team_id=? AND date>=? ORDER BY date",
         (team_id, datetime.now().strftime(notify.D_FMT))).fetchall()
@@ -519,7 +551,7 @@ def game_view(game_id):
         (team["owner_id"],)).fetchall() if p["id"] not in invited_ids]
     return render_template("game.html", team=team, game=game, rows=rows,
                            counts=notify.game_counts(con, game),
-                           problems=notify.game_shortfall(con, game, team),
+                           short=short_bits(con, game, team),
                            sub_rows=sub_rows, pool=pool, base_url=notify.BASE_URL)
 
 

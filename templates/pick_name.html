@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 {% block title %}{{ team.name }} — RSVP{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <div class="pb-text"><div class="pb-title">{{ team.name }}</div></div>
+</div>
+{% endblock %}
 {% block content %}
-<div class="auth-wrap card">
-  <h1>{{ team.name }}</h1>
-  <p class="sub">Who are you? Pick your name to see games and RSVP — no login needed.</p>
-  <form method="get" onsubmit="location.href='/{{ team.id }}/'+this.player.value; return false;">
-    <select name="player" required>
-      <option value="" disabled selected>Select your name…</option>
-      {% for p in roster %}
-        <option value="{{ p.id }}">{{ short_name(p.name) }}</option>
-      {% endfor %}
-    </select>
-    <button class="btn block" type="submit">Continue</button>
-  </form>
+<div class="auth-wrap">
+  <h1 style="letter-spacing:0.03em;">Who are you?</h1>
+  <p class="sub">Pick your name to see games and RSVP — no login needed.</p>
+  <div class="card">
+    <form method="get" onsubmit="location.href='/{{ team.id }}/'+this.player.value; return false;" class="stack">
+      <select name="player" required>
+        <option value="" disabled selected>Select your name…</option>
+        {% for p in roster %}
+          <option value="{{ p.id }}">{{ short_name(p.name) }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn primary block" type="submit">Continue</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

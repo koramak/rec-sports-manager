@@ -3,10 +3,11 @@
 {% block content %}
 <h1>Alerts</h1>
 {% for a in rows %}
-  <div class="card alert-item">
-    <div class="sub">{{ a.created_at }} · {{ "72-hour check" if a.kind == 'short72' else "Emergency" }}</div>
-    <p>{{ a.message }}</p>
-    {% if a.team_id %}<a class="btn small ghost" href="{{ url_for('team_manage', team_id=a.team_id) }}">Open team</a>{% endif %}
+  <div class="card alert-card">
+    <div class="eyebrow">{{ "72-hour check" if a.kind == 'short72' else "Late change" }}</div>
+    <div class="msg">{{ a.message }}</div>
+    <div class="when">{{ a.created_at }}</div>
+    {% if a.team_id %}<a class="edit-link" href="{{ url_for('team_manage', team_id=a.team_id) }}" style="margin-top:6px;display:inline-block;">Open team</a>{% endif %}
   </div>
 {% else %}
   <div class="card"><p class="sub">No alerts. You'll be notified here 72 hours before any short-handed game, and immediately if a late status change drops a team below minimums.</p></div>

@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Log in — RecMgr{% endblock %}
 {% block content %}
-<div class="auth-wrap card">
+<div class="auth-wrap">
   <h1>Manager log in</h1>
-  <form method="post" class="stack">
-    <label>Email</label>
-    <input type="email" name="email" required autofocus>
-    <label>Password</label>
-    <input type="password" name="password" required>
-    <button class="btn block" type="submit">Log in</button>
-  </form>
-  <p class="sub center">New manager? <a href="{{ url_for('signup') }}">Create an account</a></p>
+  <div class="card">
+    <form method="post" class="stack">
+      <label style="margin-top:0;">Email</label>
+      <input type="email" name="email" required autofocus>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      <button class="btn primary block" type="submit">Log in</button>
+    </form>
+  </div>
+  <p class="sub center">New manager? <a href="{{ url_for('signup') }}" style="color:var(--ink);font-weight:700;">Create an account</a></p>
 </div>
 {% endblock %}

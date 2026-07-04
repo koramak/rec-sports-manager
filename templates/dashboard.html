@@ -1,36 +1,63 @@
 {% extends "base.html" %}
 {% block title %}My teams — RecMgr{% endblock %}
 {% block content %}
-<h1>My teams</h1>
+<div class="dash-grid">
+  <div class="dash-main">
+    <div class="dash-head">
+      <h1>My teams</h1>
+      <a class="btn desk-only" href="{{ url_for('team_new') }}">+ New team</a>
+    </div>
 
-{% for c in cards %}
-  <div class="card">
-    <h3><a href="{{ url_for('team_manage', team_id=c.team.id) }}">{{ c.team.name }}</a></h3>
-    <div class="sub">{{ c.team.sport }}</div>
-    {% if c.next %}
-      <p class="counts">
-        Next: <strong>{{ c.next.game.game_dt }}</strong> vs {{ c.next.game.opponent or "TBD" }}<br>
-        {{ c.next.counts.total }} in ({{ c.next.counts.male }}M / {{ c.next.counts.female }}F)
-        {% if c.next.problems %}
-          — <span class="short">SHORT: {{ c.next.problems | join(", ") }}</span>
-        {% else %}
-          — <span class="ok">covered ✓</span>
-        {% endif %}
-      </p>
-      <a class="btn small ghost" href="{{ url_for('game_view', game_id=c.next.game.id) }}">Game details</a>
-    {% else %}
-      <p class="sub">No upcoming games scheduled.</p>
-    {% endif %}
+    <div class="team-cards">
+      {% for c in cards %}
+        <div class="card flush">
+          <div class="card-body">
+            <h3><a href="{{ url_for('team_manage', team_id=c.team.id) }}">{{ c.team.name }}</a></h3>
+            {% if c.next %}
+              <div class="meta-line">{{ c.next.game.game_dt | gamedt }} vs
+                <strong>{{ c.next.game.opponent or "TBD" }}</strong></div>
+              <div style="display:flex;align-items:baseline;gap:10px;">
+                <div class="headnum">{{ c.next.counts.total }}<span class="denom">/{{ c.team.min_players }}</span></div>
+                <div class="gender-caps">{{ c.next.counts.male }}M · {{ c.next.counts.female }}F</div>
+              </div>
+            {% else %}
+              <div class="meta-line">No upcoming games scheduled.</div>
+            {% endif %}
+          </div>
+          {% if c.next %}
+            {% if c.next.short %}
+              <div class="strip short">
+                <span>Short{% if c.next.short.more %} — need {{ c.next.short.more }} more{% endif %}{% if c.next.short.genders %} · {{ c.next.short.genders }}{% endif %}</span>
+                <a class="chip" href="{{ url_for('game_view', game_id=c.next.game.id) }}#invite-subs">Find subs</a>
+              </div>
+            {% else %}
+              <div class="strip ok"><span>Covered ✓</span></div>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="card"><p class="sub">No teams yet. Create your first team to get started.</p></div>
+      {% endfor %}
+    </div>
+
+    <a class="btn block mobile-only" href="{{ url_for('team_new') }}" style="margin-top:14px;">+ New team</a>
+
+    <div class="scheduler-note">Scheduler runs every minute: RSVP requests, daily reminders, 72-hour checks, tournament reminders.
+      <form method="post" action="{{ url_for('tick') }}" class="inline-form"><button type="submit">Run now</button></form>
+    </div>
   </div>
-{% else %}
-  <div class="card"><p>No teams yet. Create your first team to get started.</p></div>
-{% endfor %}
 
-<div class="btnrow">
-  <a class="btn" href="{{ url_for('team_new') }}">+ New team</a>
-  <form method="post" action="{{ url_for('tick') }}" class="inline-form">
-    <button class="btn ghost" type="submit">Run scheduler now</button>
-  </form>
+  <aside class="dash-side desk-only">
+    <div class="section-h">Alerts</div>
+    {% for a in recent_alerts %}
+      <div class="card alert-card">
+        <div class="eyebrow">{{ "72-hour check" if a.kind == 'short72' else "Late change" }}</div>
+        <div class="msg">{{ a.message }}</div>
+        <div class="when">{{ a.created_at }}</div>
+      </div>
+    {% else %}
+      <div class="card"><p class="sub">No alerts yet.</p></div>
+    {% endfor %}
+  </aside>
 </div>
-<p class="sub">The scheduler also runs automatically every minute: RSVP requests, daily reminders, 72-hour checks and tournament reminders.</p>
 {% endblock %}

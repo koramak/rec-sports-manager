@@ -1,46 +1,79 @@
 {% extends "base.html" %}
 {% block title %}{{ t.name }} — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ url_for('team_manage', team_id=team.id) }}">←</a>
+  <div class="pb-text">
+    <div class="pb-eyebrow">Tournament · {{ t.date | fmtdate }}</div>
+    <div class="pb-title">{{ t.name }}</div>
+  </div>
+</div>
+{% endblock %}
 {% block content %}
-<h1>{{ t.name }}</h1>
-<p class="sub">{{ t.date }} · {{ t.division }} · {{ t.location or "Location TBD" }}
-  {% if t.host %}· hosted by {{ t.host }}{% endif %}
-  {% if t.cost %}· ~${{ "%.0f" | format(t.cost) }}/person{% endif %}</p>
-<div class="btnrow">
-  <a class="btn small ghost" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
-  <a class="btn small ghost" href="{{ url_for('team_manage', team_id=team.id) }}">← {{ team.name }}</a>
+<div class="desk-title">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+    <div>
+      <div class="eyebrow">Tournament · {{ t.date | fmtdate }}</div>
+      <h1 style="margin:0;">{{ t.name }}</h1>
+    </div>
+    <div style="margin-left:auto;">
+      <a class="btn small outline" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-  <h3>{{ in_count }} confirmed in</h3>
-  <table class="list">
-    <tr><th>Invited player</th><th>G</th><th>Status</th></tr>
+<div class="meta-line" style="margin-bottom:14px;">{{ t.division }} · {{ t.location or "Location TBD" }}{% if t.host %} · hosted by {{ t.host }}{% endif %}{% if t.cost %} · ~${{ "%.0f" | format(t.cost) }}/person{% endif %}
+  <a class="edit-link mobile-only" style="margin-left:6px;" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
+</div>
+
+<div class="card flush">
+  <div class="card-body" style="display:flex;align-items:center;gap:14px;">
+    <div class="headnum big">{{ in_count }}</div>
+    <div class="gender-caps" style="font-weight:800;">Confirmed in</div>
+  </div>
+  <div class="list-rows" style="border-top:1px solid var(--hairline);">
     {% for r in rows %}
-      <tr>
-        <td>{{ short_name(r.player.name) }}</td>
-        <td>{{ r.player.gender }}</td>
-        <td><span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span></td>
-      </tr>
+      <div class="list-row">
+        <div class="lr-main"><div class="lr-name">{{ short_name(r.player.name) }} <span class="g">{{ r.player.gender }}</span></div></div>
+        <span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span>
+      </div>
     {% else %}
-      <tr><td colspan="3" class="sub">No one invited yet.</td></tr>
+      <div class="list-row"><div class="sub">No one invited yet.</div></div>
     {% endfor %}
-  </table>
+  </div>
 </div>
 
+<div class="section-h">Invite more players</div>
 <div class="card">
-  <h3>Invite more players (rolling)</h3>
-  <p class="sub">Reminders for unconfirmed RSVPs start automatically 3 weeks before the event.</p>
+  <div class="sub">Rolling invites — add anyone, anytime. Reminders for unconfirmed RSVPs start 3 weeks before the event.</div>
   {% if candidates %}
-    <form method="post" action="{{ url_for('tournament_invite', tournament_id=t.id) }}" class="stack">
+    <form method="post" action="{{ url_for('tournament_invite', tournament_id=t.id) }}" id="inv-form">
       {% for p in candidates %}
-        <label style="display:flex;align-items:center;gap:8px;margin:6px 0;">
+        <label class="check-row">
           <input type="checkbox" name="player_id" value="{{ p.id }}">
-          {{ p.name }} ({{ p.gender }}){% if p.is_sub %} <span class="sub">— sub pool</span>{% endif %}
+          <span class="box"></span>
+          <span>{{ p.name }} <span class="meta">{{ p.gender }}{% if p.is_sub %} · sub pool{% endif %}</span></span>
         </label>
       {% endfor %}
-      <button class="btn" type="submit">Send invites</button>
+      <button class="btn primary block" type="submit" id="inv-btn">Select players</button>
     </form>
   {% else %}
     <p class="sub">Everyone in your player pool has been invited.</p>
   {% endif %}
 </div>
+
+<script>
+const form = document.getElementById('inv-form');
+if (form) {
+  const btn = document.getElementById('inv-btn');
+  const update = () => {
+    const n = form.querySelectorAll('input[name=player_id]:checked').length;
+    btn.textContent = n ? `Send ${n} invite${n > 1 ? 's' : ''}` : 'Select players';
+    btn.disabled = !n;
+  };
+  form.addEventListener('change', update);
+  update();
+}
+</script>
 {% endblock %}

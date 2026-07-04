@@ -1,46 +1,54 @@
 {% extends "base.html" %}
 {% block title %}{{ "Edit player" if player else ("New sub" if is_sub else "New player") }} — RecMgr{% endblock %}
-{% block content %}
-<h1>{{ player.name if player else ("Add sub to pool" if is_sub else "Add player") }}</h1>
-<div class="card">
-  <form method="post" class="stack">
-    <label>Name *</label>
-    <input type="text" name="name" value="{{ player.name if player else '' }}" required>
-    <div class="row2">
-      <div>
-        <label>Gender *</label>
-        <select name="gender">
-          <option value="M" {% if player and player.gender == 'M' %}selected{% endif %}>Male</option>
-          <option value="F" {% if player and player.gender == 'F' %}selected{% endif %}>Female</option>
-        </select>
-      </div>
-      <div>
-        <label>Player number</label>
-        <input type="text" name="number" value="{{ player.number if player else '' }}">
-      </div>
-    </div>
-    <label>Phone (phone or email required)</label>
-    <input type="tel" name="phone" value="{{ player.phone if player else '' }}">
-    <label>Email</label>
-    <input type="email" name="email" value="{{ player.email if player else '' }}">
-    <label>Positions</label>
-    <div class="checkgrid">
-      {% set current = (player.positions or '').split(',') if player else [] %}
-      {% for pos in POSITIONS %}
-        <label><input type="checkbox" name="pos_{{ pos }}" {% if pos in current %}checked{% endif %}> {{ pos }}</label>
-      {% endfor %}
-    </div>
-    <label>Skill level</label>
-    <input type="text" name="skill" value="{{ player.skill if player else '' }}" placeholder="e.g. A, B, C, Rec">
-    <label>Notes</label>
-    <textarea name="notes">{{ player.notes if player else '' }}</textarea>
-    <button class="btn block" type="submit">Save</button>
-  </form>
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ request.args.get('next') or (url_for('subs') if is_sub else url_for('dashboard')) }}">←</a>
+  <div class="pb-text"><div class="pb-title">{{ player.name if player else ("Add sub" if is_sub else "Add player") }}</div></div>
 </div>
+{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+<h1 class="desk-title">{{ player.name if player else ("Add sub to pool" if is_sub else "Add player") }}</h1>
+<form method="post" class="stack">
+  <label>Name</label>
+  <input type="text" name="name" value="{{ player.name if player else '' }}" required>
+  <div class="row2">
+    <div>
+      <label>Gender</label>
+      <select name="gender">
+        <option value="M" {% if player and player.gender == 'M' %}selected{% endif %}>Male</option>
+        <option value="F" {% if player and player.gender == 'F' %}selected{% endif %}>Female</option>
+      </select>
+    </div>
+    <div>
+      <label>Number <span class="opt">— optional</span></label>
+      <input type="text" name="number" value="{{ player.number if player else '' }}">
+    </div>
+  </div>
+  <label>Phone <span class="opt">— phone or email required</span></label>
+  <input type="tel" name="phone" value="{{ player.phone if player else '' }}">
+  <label>Email</label>
+  <input type="email" name="email" value="{{ player.email if player else '' }}">
+  <label>Positions <span class="opt">— optional</span></label>
+  <div class="checkgrid">
+    {% set current = (player.positions or '').split(',') if player else [] %}
+    {% for pos in POSITIONS %}
+      <label style="margin:0;"><input type="checkbox" name="pos_{{ pos }}" {% if pos in current %}checked{% endif %}> {{ pos }}</label>
+    {% endfor %}
+  </div>
+  <label>Skill level <span class="opt">— optional</span></label>
+  <input type="text" name="skill" value="{{ player.skill if player else '' }}" placeholder="e.g. A, B, C, Rec">
+  <label>Notes <span class="opt">— optional</span></label>
+  <textarea name="notes">{{ player.notes if player else '' }}</textarea>
+  <button class="btn primary block" type="submit">Save</button>
+</form>
+<a class="cancel-link" href="{{ request.args.get('next') or (url_for('subs') if is_sub else url_for('dashboard')) }}">Cancel</a>
 {% if player %}
 <form method="post" action="{{ url_for('player_delete', player_id=player.id, next=request.args.get('next','')) }}"
-      onsubmit="return confirm('Delete {{ player.name }}? This removes their RSVPs too.')">
+      onsubmit="return confirm('Delete {{ player.name }}? This removes their RSVPs too.')" style="margin-top:22px;">
   <button class="btn danger block" type="submit">Delete player</button>
 </form>
 {% endif %}
+</div>
 {% endblock %}

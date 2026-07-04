@@ -1,28 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Import players — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ url_for('team_manage', team_id=team.id) }}">←</a>
+  <div class="pb-text"><div class="pb-title">Import players</div></div>
+</div>
+{% endblock %}
 {% block content %}
-<h1>Import players — {{ team.name }}</h1>
+<h1 class="desk-title">Import players <span class="count">{{ team.name }}</span></h1>
 
 <div class="card">
-  <h3>📱 From your phone contacts</h3>
-  <p class="sub">On a mobile browser that supports the Contact Picker, tap below and select the
-    players you want — we'll fill in the list for you to review before importing.</p>
-  <button class="btn" type="button" id="pick-contacts">Pick from contacts</button>
+  <div class="eyebrow">📱 From your phone contacts</div>
+  <div class="sub" style="margin-top:4px;">On a mobile browser that supports the Contact Picker, tap below and select
+    players — we'll fill in the list for you to review before importing.</div>
+  <button class="btn block" type="button" id="pick-contacts" style="margin-top:12px;">Pick from contacts</button>
   <p class="sub" id="picker-msg" hidden>Contact Picker isn't available in this browser — use CSV below.</p>
 </div>
 
 <div class="card">
-  <h3>CSV import</h3>
-  <p class="sub">Header row required. Columns: <code>name, gender, phone, email, number, positions, skill, notes</code>
-    (name + phone or email are required; gender defaults to M).</p>
+  <div class="eyebrow">CSV import</div>
+  <div class="sub" style="margin-top:4px;">Header row required. Columns: <code>name, gender, phone, email, number, positions, skill, notes</code>
+    (name + phone or email required; gender defaults to M).</div>
   <form method="post" enctype="multipart/form-data" class="stack">
     <label>Upload a CSV file…</label>
     <input type="file" name="csv_file" accept=".csv,text/csv">
     <label>…or paste / review rows here</label>
     <textarea name="csv_text" id="csv-text" rows="8" placeholder="name,gender,phone,email&#10;Dave Miller,M,555-0101,&#10;Sara Ortiz,F,,sara@example.com"></textarea>
-    <label><input type="checkbox" name="as_subs" value="1"> Import into my <strong>sub pool</strong> instead of this team's roster</label>
-    <button class="btn block" type="submit">Import</button>
+    <label class="check-row" style="text-transform:none;letter-spacing:0;">
+      <input type="checkbox" name="as_subs" value="1"><span class="box"></span>
+      <span style="font-size:14px;">Import into my <strong>sub pool</strong> instead of this team's roster</span>
+    </label>
+    <button class="btn primary block" type="submit">Import</button>
   </form>
+  <a class="cancel-link" href="{{ url_for('team_manage', team_id=team.id) }}">Cancel</a>
 </div>
 
 <script>

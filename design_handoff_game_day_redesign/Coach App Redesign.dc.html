@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@400;600;700;900&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #ececee; }
+  </style>
+</helmet>
+
+<section style="padding: 48px; display: flex; flex-direction: column; gap: 28px;">
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #555;">Turn 2 — Game Day, built out · all screens, mobile + desktop · Barlow, tracked caps</div>
+
+  <div id="2a" style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="#2a" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; background: #1c2430; color: #fff; padding: 3px 8px; border-radius: 6px; text-decoration: none;">2a</a>
+      <div style="font-family: 'Barlow', sans-serif; font-weight: 700; font-size: 16px; color: #1c2430;">Game Day — full system</div>
+    </div>
+
+    <!-- ===== MOBILE ROW ===== -->
+    <div style="display: flex; gap: 24px; align-items: flex-start;">
+
+      <!-- 2a: dashboard -->
+      <div style="width: 390px; flex: none; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px; display: flex; align-items: center; gap: 10px;">
+          <div style="font-weight: 800; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">RecMgr</div>
+          <div style="margin-left: auto; display: flex; gap: 14px; align-items: center; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+            <span style="opacity: 0.65;">Subs</span>
+            <span>Alerts <span style="background: #f2542d; border-radius: 99px; padding: 1px 7px; font-size: 11px; letter-spacing: 0;">2</span></span>
+          </div>
+        </div>
+        <div style="padding: 22px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 25px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;">My teams</div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-size: 19px; font-weight: 800;">Thursday Coed Softball</div>
+              <div style="font-size: 14.5px; color: #4b5265; font-weight: 500;">Thu Jul 9 · 6:30 PM vs <strong style="color: #1b2233; font-weight: 700;">Brewhouse Bombers</strong></div>
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <div style="font-size: 27px; font-weight: 800;">9<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+                <div style="font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">6M · 3F</div>
+              </div>
+            </div>
+            <div style="background: #f2542d; color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 8px;">
+              <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;">Short — need 1 more · 1F</div>
+              <div style="margin-left: auto; background: #fff; color: #f2542d; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 8px;">Find subs</div>
+            </div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-size: 19px; font-weight: 800;">Sunday Slowpitch</div>
+              <div style="font-size: 14.5px; color: #4b5265; font-weight: 500;">Sun Jul 12 · 10:00 AM vs <strong style="color: #1b2233; font-weight: 700;">The Dingers</strong></div>
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <div style="font-size: 27px; font-weight: 800;">12<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+              </div>
+            </div>
+            <div style="background: #2a9d5c; color: #fff; padding: 10px 16px;">
+              <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;">Covered ✓</div>
+            </div>
+          </div>
+
+          <div style="background: #1b2233; color: #fff; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; padding: 15px; border-radius: 12px; text-align: center;">+ New team</div>
+        </div>
+      </div>
+
+      <!-- 2a: team page -->
+      <div style="width: 390px; flex: none; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px; display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 18px; font-weight: 700;">←</div>
+          <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;">Thursday Coed Softball</div>
+        </div>
+        <div style="padding: 20px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="font-size: 13.5px; color: #4b5265; font-weight: 500;">Coed softball · min 10 players · 4F</div>
+            <div style="margin-left: auto; display: flex; gap: 6px;">
+              <div style="border: 2px solid #1b2233; color: #1b2233; font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 10px; border-radius: 8px;">Settings</div>
+              <div style="border: 2px solid #1b2233; color: #1b2233; font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 10px; border-radius: 8px;">Import</div>
+            </div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.1em;">Team RSVP link</div>
+            <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Share once — players pick their name, no login.</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <div style="flex: 1; background: #f7f3ea; border: 1px dashed #c9c1ae; border-radius: 8px; padding: 9px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4b5265; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">recmgr.app/t/coed-thu</div>
+              <div style="background: #1b2233; color: #fff; font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 12px; border-radius: 8px;">Copy</div>
+            </div>
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Upcoming games</div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                <div style="font-size: 15.5px; font-weight: 800;">Thu Jul 9 · 6:30 PM vs Brewhouse Bombers</div>
+                <div style="font-size: 12.5px; color: #6d7385; font-weight: 500;">Diamond 3, Riverside Park</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 800;">9<span style="font-size: 13px; color: #8a8fa0;">/10</span></div>
+            </div>
+            <div style="background: #f2542d; color: #fff; padding: 7px 16px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Short · 1F</div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                <div style="font-size: 15.5px; font-weight: 800;">Thu Jul 16 · 6:30 PM vs Rally Cats</div>
+                <div style="font-size: 12.5px; color: #6d7385; font-weight: 500;">Diamond 1, Riverside Park</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 800;">11<span style="font-size: 13px; color: #8a8fa0;">/10</span></div>
+            </div>
+            <div style="background: #2a9d5c; color: #fff; padding: 7px 16px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Covered ✓</div>
+          </div>
+
+          <div style="border: 2px dashed #b8b09d; color: #4b5265; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; padding: 11px; border-radius: 12px; text-align: center;">+ Add game</div>
+
+          <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Tournaments</div>
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="font-size: 15.5px; font-weight: 800;">Midsummer Classic</div>
+            <div style="font-size: 12.5px; color: #6d7385; font-weight: 500;">Sat Aug 8 · Coed · Riverside Complex · ~$25/person</div>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 4px;">
+            <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Roster</div>
+            <div style="font-size: 13px; color: #8a8fa0; font-weight: 700;">14</div>
+          </div>
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid #e8e4d9;">
+              <div style="flex: 1; display: flex; flex-direction: column;">
+                <div style="font-size: 15px; font-weight: 700;">Dave Martinez <span style="color: #8a8fa0; font-weight: 600; font-size: 13px;">#7</span></div>
+                <div style="font-size: 12px; color: #6d7385; font-weight: 500;">SS, 2B · 555-0142</div>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">M</div>
+              <div style="font-size: 12px; font-weight: 800; color: #1b2233; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid #e8e4d9;">
+              <div style="flex: 1; display: flex; flex-direction: column;">
+                <div style="font-size: 15px; font-weight: 700;">Sarah Kim <span style="color: #8a8fa0; font-weight: 600; font-size: 13px;">#12</span></div>
+                <div style="font-size: 12px; color: #6d7385; font-weight: 500;">C, 1B · 555-0177</div>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">F</div>
+              <div style="font-size: 12px; font-weight: 800; color: #1b2233; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 11px 16px;">
+              <div style="flex: 1; display: flex; flex-direction: column;">
+                <div style="font-size: 15px; font-weight: 700;">Mike Osei</div>
+                <div style="font-size: 12px; color: #6d7385; font-weight: 500;">OF · mike@osei.dev</div>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">M</div>
+              <div style="font-size: 12px; font-weight: 800; color: #1b2233; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+            </div>
+            <div style="padding: 10px 16px; background: #f7f3ea; border-top: 1px solid #e8e4d9; font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; text-align: center;">+ 11 more</div>
+          </div>
+          <div style="border: 2px dashed #b8b09d; color: #4b5265; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; padding: 11px; border-radius: 12px; text-align: center;">+ Add player</div>
+        </div>
+      </div>
+
+      <!-- 2a: game detail -->
+      <div style="width: 390px; flex: none; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px; display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 18px; font-weight: 700;">←</div>
+          <div style="display: flex; flex-direction: column;">
+            <div style="font-size: 11px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.1em;">Thu Jul 9 · 6:30 PM</div>
+            <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.03em; text-transform: uppercase;">vs Brewhouse Bombers</div>
+          </div>
+        </div>
+        <div style="padding: 20px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 13.5px; color: #4b5265; font-weight: 500;">Thursday Coed Softball · Diamond 3, Riverside Park</div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="padding: 14px 16px; display: flex; align-items: center; gap: 14px;">
+              <div style="font-size: 40px; font-weight: 800; line-height: 1;">9<span style="font-size: 20px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 12px; color: #8a8fa0; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;">Headcount</div>
+                <div style="font-size: 13.5px; color: #4b5265; font-weight: 600;">6M · 3F — need 10, 4F</div>
+              </div>
+            </div>
+            <div style="background: #f2542d; color: #fff; padding: 10px 16px; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;">Short 1 player, 1F — pick subs below</div>
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Roster RSVPs</div>
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e8e4d9; gap: 8px;">
+              <div style="flex: 1; font-size: 15px; font-weight: 700;">Dave M. <span style="color: #8a8fa0; font-size: 12px; font-weight: 700;">M</span></div>
+              <div style="background: #2a9d5c; color: #fff; font-weight: 800; font-size: 11px; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 99px;">IN</div>
+            </div>
+            <div style="display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e8e4d9; gap: 8px;">
+              <div style="flex: 1; font-size: 15px; font-weight: 700;">Sarah K. <span style="color: #8a8fa0; font-size: 12px; font-weight: 700;">F</span></div>
+              <div style="background: #2a9d5c; color: #fff; font-weight: 800; font-size: 11px; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 99px;">IN</div>
+            </div>
+            <div style="display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e8e4d9; gap: 8px;">
+              <div style="flex: 1; font-size: 15px; font-weight: 700;">Jess T. <span style="color: #8a8fa0; font-size: 12px; font-weight: 700;">F</span></div>
+              <div style="background: #fff; color: #b3362f; border: 2px solid #b3362f; font-weight: 800; font-size: 11px; letter-spacing: 0.08em; padding: 2px 10px; border-radius: 99px;">OUT</div>
+            </div>
+            <div style="display: flex; align-items: center; padding: 10px 16px; gap: 8px;">
+              <div style="flex: 1; font-size: 15px; font-weight: 700;">Chris B. <span style="color: #8a8fa0; font-size: 12px; font-weight: 700;">M</span></div>
+              <div style="background: #fff; color: #9a6b00; border: 2px solid #d9a400; font-weight: 800; font-size: 11px; letter-spacing: 0.08em; padding: 2px 10px; border-radius: 99px;">TBD</div>
+            </div>
+            <div style="padding: 10px 16px; background: #f7f3ea; border-top: 1px solid #e8e4d9; font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; text-align: center;">+ 10 more</div>
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Invite subs</div>
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Each sub gets a personal link for this game only.</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 20px; height: 20px; border: 2px solid #1b2233; border-radius: 6px; background: #2a9d5c; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;">✓</div>
+                <div style="font-size: 14.5px; font-weight: 700;">Ana Reyes <span style="color: #8a8fa0; font-weight: 600; font-size: 12.5px;">F · C, OF · Strong</span></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 20px; height: 20px; border: 2px solid #c9cdd8; border-radius: 6px;"></div>
+                <div style="font-size: 14.5px; font-weight: 700;">Tom Liu <span style="color: #8a8fa0; font-weight: 600; font-size: 12.5px;">M · P, 1B</span></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 20px; height: 20px; border: 2px solid #c9cdd8; border-radius: 6px;"></div>
+                <div style="font-size: 14.5px; font-weight: 700;">Priya N. <span style="color: #8a8fa0; font-weight: 600; font-size: 12.5px;">F · OF</span></div>
+              </div>
+            </div>
+            <div style="background: #f2542d; color: #fff; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; padding: 13px; border-radius: 10px; text-align: center; border: 2px solid #1b2233; box-shadow: 2px 2px 0 #1b2233;">Send 1 sub invite</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2a: player rsvp -->
+      <div style="width: 390px; flex: none; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px;">
+          <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;">Thursday Coed Softball</div>
+        </div>
+        <div style="padding: 22px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="font-size: 25px; font-weight: 800; letter-spacing: 0.03em;">HI DAVE 👋</div>
+            <div style="font-size: 13.5px; color: #6d7385; font-weight: 500;">Not you? <span style="color: #1b2233; font-weight: 700; text-decoration: underline;">Pick your name</span></div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.1em;">Thu Jul 9 · 6:30 PM</div>
+              <div style="font-size: 19px; font-weight: 800;">vs Brewhouse Bombers</div>
+              <div style="font-size: 13px; color: #6d7385; font-weight: 500;">📍 Diamond 3, Riverside Park</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #2a9d5c; color: #fff; border: 2px solid #1b2233; box-shadow: 2px 2px 0 #1b2233;">IN</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">OUT</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">T.B.D.</div>
+            </div>
+            <div style="font-size: 12.5px; color: #6d7385; font-weight: 700; letter-spacing: 0.06em;">▸ WHO'S IN <span style="background: #1b2233; color: #fff; font-weight: 800; border-radius: 99px; padding: 1px 8px; font-size: 12px; letter-spacing: 0;">9</span></div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.1em;">Thu Jul 16 · 6:30 PM</div>
+              <div style="font-size: 19px; font-weight: 800;">vs Rally Cats</div>
+              <div style="font-size: 13px; color: #6d7385; font-weight: 500;">📍 Diamond 1, Riverside Park</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">IN</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">OUT</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">T.B.D.</div>
+            </div>
+            <div style="font-size: 12.5px; color: #6d7385; font-weight: 700; letter-spacing: 0.06em;">▸ WHO'S IN <span style="background: #1b2233; color: #fff; font-weight: 800; border-radius: 99px; padding: 1px 8px; font-size: 12px; letter-spacing: 0;">4</span></div>
+          </div>
+
+          <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 4px 4px 0 #1b2233;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.1em;">Tournament · Sat Aug 8</div>
+              <div style="font-size: 19px; font-weight: 800;">Midsummer Classic</div>
+              <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Coed · Riverside Complex · ~$25/person</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">IN</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">OUT</div>
+              <div style="padding: 15px 0; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">T.B.D.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2a: add game form -->
+      <div style="width: 390px; flex: none; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px; display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 18px; font-weight: 700;">←</div>
+          <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;">Add game</div>
+        </div>
+        <div style="padding: 22px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div style="font-size: 12px; font-weight: 800; color: #6d7385; text-transform: uppercase; letter-spacing: 0.08em;">Date</div>
+              <div style="background: #fff; border: 2px solid #1b2233; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 600;">Jul 23, 2026</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div style="font-size: 12px; font-weight: 800; color: #6d7385; text-transform: uppercase; letter-spacing: 0.08em;">Time</div>
+              <div style="background: #fff; border: 2px solid #1b2233; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 600;">6:30 PM</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 12px; font-weight: 800; color: #6d7385; text-transform: uppercase; letter-spacing: 0.08em;">Opponent</div>
+            <div style="background: #fff; border: 2px solid #1b2233; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 600;">Rally Cats</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 12px; font-weight: 800; color: #6d7385; text-transform: uppercase; letter-spacing: 0.08em;">Location</div>
+            <div style="background: #fff; border: 2px solid #1b2233; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 600;">Diamond 1, Riverside Park</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 12px; font-weight: 800; color: #6d7385; text-transform: uppercase; letter-spacing: 0.08em;">Notes <span style="color: #b8b09d;">— optional</span></div>
+            <div style="background: #fff; border: 2px solid #c9cdd8; border-radius: 10px; padding: 12px 12px 34px; font-size: 15px; font-weight: 500; color: #8a8fa0;">Bring the red jerseys</div>
+          </div>
+          <div style="background: #f2542d; color: #fff; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; padding: 15px; border-radius: 12px; text-align: center; border: 2px solid #1b2233; box-shadow: 2px 2px 0 #1b2233; margin-top: 4px;">Save game</div>
+          <div style="text-align: center; font-size: 13px; font-weight: 700; color: #6d7385; text-transform: uppercase; letter-spacing: 0.06em;">Cancel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DESKTOP ROW ===== -->
+    <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
+
+      <!-- 2a: desktop dashboard -->
+      <div style="width: 1160px; background: #f7f3ea; border-radius: 16px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 16px 32px; display: flex; align-items: center; gap: 28px;">
+          <div style="font-weight: 800; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">RecMgr</div>
+          <div style="display: flex; gap: 22px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+            <span style="border-bottom: 2px solid #f2542d; padding-bottom: 2px;">Teams</span>
+            <span style="opacity: 0.65;">Subs</span>
+            <span style="opacity: 0.65;">Alerts <span style="background: #f2542d; border-radius: 99px; padding: 1px 7px; font-size: 11px; letter-spacing: 0; opacity: 1;">2</span></span>
+            <span style="opacity: 0.65;">Outbox</span>
+          </div>
+          <div style="margin-left: auto; font-size: 13px; font-weight: 600; opacity: 0.65;">zane@example.com · Log out</div>
+        </div>
+        <div style="padding: 32px; display: flex; gap: 28px; align-items: flex-start;">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="font-size: 26px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;">My teams</div>
+              <div style="margin-left: auto; background: #1b2233; color: #fff; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; padding: 11px 18px; border-radius: 10px;">+ New team</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="padding: 18px 20px 14px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="font-size: 19px; font-weight: 800;">Thursday Coed Softball</div>
+                  <div style="font-size: 14.5px; color: #4b5265; font-weight: 500;">Thu Jul 9 · 6:30 PM vs <strong style="color: #1b2233; font-weight: 700;">Brewhouse Bombers</strong></div>
+                  <div style="display: flex; align-items: baseline; gap: 10px;">
+                    <div style="font-size: 28px; font-weight: 800;">9<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+                    <div style="font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">6M · 3F</div>
+                  </div>
+                </div>
+                <div style="background: #f2542d; color: #fff; padding: 10px 20px; display: flex; align-items: center; gap: 8px;">
+                  <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;">Short — need 1 more · 1F</div>
+                  <div style="margin-left: auto; background: #fff; color: #f2542d; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 8px;">Find subs</div>
+                </div>
+              </div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="padding: 18px 20px 14px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="font-size: 19px; font-weight: 800;">Sunday Slowpitch</div>
+                  <div style="font-size: 14.5px; color: #4b5265; font-weight: 500;">Sun Jul 12 · 10:00 AM vs <strong style="color: #1b2233; font-weight: 700;">The Dingers</strong></div>
+                  <div style="display: flex; align-items: baseline; gap: 10px;">
+                    <div style="font-size: 28px; font-weight: 800;">12<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+                    <div style="font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">12M</div>
+                  </div>
+                </div>
+                <div style="background: #2a9d5c; color: #fff; padding: 10px 20px;">
+                  <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;">Covered ✓</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size: 13px; color: #8a8fa0; font-weight: 500;">Scheduler runs every minute: RSVP requests, daily reminders, 72-hour checks, tournament reminders. <span style="text-decoration: underline; font-weight: 700; color: #4b5265;">Run now</span></div>
+          </div>
+          <div style="width: 320px; flex: none; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Alerts</div>
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; border-left: 6px solid #f2542d; padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.08em;">72-hour check</div>
+              <div style="font-size: 14px; font-weight: 600;">Thu Jul 9 game is short 1 player (1F). Pick subs.</div>
+              <div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">2 hours ago</div>
+            </div>
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; border-left: 6px solid #f2542d; padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.08em;">Late change</div>
+              <div style="font-size: 14px; font-weight: 600;">Jess T. switched to OUT for Thu Jul 9.</div>
+              <div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">Yesterday</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2a: desktop team page -->
+      <div style="width: 1160px; background: #f7f3ea; border-radius: 16px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Barlow', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+        <div style="background: #1b2233; color: #fff; padding: 16px 32px; display: flex; align-items: center; gap: 28px;">
+          <div style="font-weight: 800; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">RecMgr</div>
+          <div style="display: flex; gap: 22px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+            <span style="border-bottom: 2px solid #f2542d; padding-bottom: 2px;">Teams</span>
+            <span style="opacity: 0.65;">Subs</span>
+            <span style="opacity: 0.65;">Alerts</span>
+            <span style="opacity: 0.65;">Outbox</span>
+          </div>
+          <div style="margin-left: auto; font-size: 13px; font-weight: 600; opacity: 0.65;">zane@example.com · Log out</div>
+        </div>
+        <div style="padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 26px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase;">Thursday Coed Softball</div>
+              <div style="font-size: 14px; color: #6d7385; font-weight: 500;">Coed softball · min 10 players · 4F</div>
+            </div>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+              <div style="border: 2px solid #1b2233; color: #1b2233; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 14px; border-radius: 10px;">Settings</div>
+              <div style="border: 2px solid #1b2233; color: #1b2233; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 14px; border-radius: 10px;">Import players</div>
+              <div style="background: #1b2233; color: #fff; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 14px; border-radius: 10px; border: 2px solid #1b2233;">+ Add game</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 24px; align-items: flex-start;">
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Upcoming games</div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
+                  <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                    <div style="font-size: 16px; font-weight: 800;">Thu Jul 9 · 6:30 PM vs Brewhouse Bombers</div>
+                    <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Diamond 3, Riverside Park</div>
+                  </div>
+                  <div style="font-size: 22px; font-weight: 800;">9<span style="font-size: 14px; color: #8a8fa0;">/10</span></div>
+                </div>
+                <div style="background: #f2542d; color: #fff; padding: 8px 18px; display: flex; align-items: center;">
+                  <div style="font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Short · 1F</div>
+                  <div style="margin-left: auto; background: #fff; color: #f2542d; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 10px; border-radius: 7px;">Find subs</div>
+                </div>
+              </div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
+                  <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                    <div style="font-size: 16px; font-weight: 800;">Thu Jul 16 · 6:30 PM vs Rally Cats</div>
+                    <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Diamond 1, Riverside Park</div>
+                  </div>
+                  <div style="font-size: 22px; font-weight: 800;">11<span style="font-size: 14px; color: #8a8fa0;">/10</span></div>
+                </div>
+                <div style="background: #2a9d5c; color: #fff; padding: 8px 18px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Covered ✓</div>
+              </div>
+              <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px;">Tournaments</div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 14px 18px; display: flex; align-items: center; gap: 12px; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                  <div style="font-size: 16px; font-weight: 800;">Midsummer Classic</div>
+                  <div style="font-size: 13px; color: #6d7385; font-weight: 500;">Sat Aug 8 · Coed · Riverside Complex · ~$25/person</div>
+                </div>
+                <div style="font-size: 12px; font-weight: 800; color: #1b2233; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">View</div>
+              </div>
+              <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px;">Team RSVP link</div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 14px 18px; display: flex; gap: 10px; align-items: center; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="flex: 1; background: #f7f3ea; border: 1px dashed #c9c1ae; border-radius: 8px; padding: 10px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4b5265;">recmgr.app/t/coed-thu</div>
+                <div style="background: #1b2233; color: #fff; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; border-radius: 8px;">Copy</div>
+              </div>
+            </div>
+            <div style="flex: 1.15; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Roster</div>
+                <div style="font-size: 13px; color: #8a8fa0; font-weight: 700;">14</div>
+                <div style="margin-left: auto; font-size: 12px; font-weight: 800; color: #1b2233; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">+ Add player</div>
+              </div>
+              <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px 112px 44px; gap: 8px; padding: 10px 18px; background: #f7f3ea; border-bottom: 1px solid #e8e4d9; font-size: 11px; font-weight: 800; color: #8a8fa0; text-transform: uppercase; letter-spacing: 0.08em;">
+                  <div>Player</div><div>G</div><div>Contact</div><div></div>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px 112px 44px; gap: 8px; padding: 11px 18px; border-bottom: 1px solid #e8e4d9; align-items: center;">
+                  <div style="min-width: 0;"><div style="font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dave Martinez</div><div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">#7 · SS, 2B</div></div>
+                  <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">M</div>
+                  <div style="font-size: 13px; color: #6d7385; font-weight: 500;">555-0142</div>
+                  <div style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px 112px 44px; gap: 8px; padding: 11px 18px; border-bottom: 1px solid #e8e4d9; align-items: center;">
+                  <div style="min-width: 0;"><div style="font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sarah Kim</div><div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">#12 · C, 1B</div></div>
+                  <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">F</div>
+                  <div style="font-size: 13px; color: #6d7385; font-weight: 500;">555-0177</div>
+                  <div style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px 112px 44px; gap: 8px; padding: 11px 18px; border-bottom: 1px solid #e8e4d9; align-items: center;">
+                  <div style="min-width: 0;"><div style="font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mike Osei</div><div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">OF</div></div>
+                  <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">M</div>
+                  <div style="font-size: 13px; color: #6d7385; font-weight: 500;">mike@osei.dev</div>
+                  <div style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px 112px 44px; gap: 8px; padding: 11px 18px; border-bottom: 1px solid #e8e4d9; align-items: center;">
+                  <div style="min-width: 0;"><div style="font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Jess Tran</div><div style="font-size: 12px; color: #8a8fa0; font-weight: 600;">#3 · OF</div></div>
+                  <div style="font-size: 12px; font-weight: 800; color: #8a8fa0;">F</div>
+                  <div style="font-size: 13px; color: #6d7385; font-weight: 500;">555-0199</div>
+                  <div style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;">Edit</div>
+                </div>
+                <div style="padding: 10px 18px; background: #f7f3ea; font-size: 12px; color: #8a8fa0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; text-align: center;">+ 10 more</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #555; margin-top: 24px;">Turn 1 — Three directions · dashboard + player RSVP (mobile)</div>
+  <div style="display: flex; gap: 56px; align-items: flex-start; flex-wrap: wrap;">
+
+    <!-- ============ OPTION 1A — FRESH GREEN ============ -->
+    <div id="1a" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="#1a" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; background: #1c2430; color: #fff; padding: 3px 8px; border-radius: 6px; text-decoration: none;">1a</a>
+        <div style="font-family: 'Figtree', sans-serif; font-weight: 700; font-size: 16px; color: #1c2430;">Fresh Green — keep the identity, polish everything</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: flex-start;">
+
+        <!-- 1a dashboard -->
+        <div style="width: 390px; background: #f6f7f4; border-radius: 28px; border: 1px solid #d8dcd4; overflow: hidden; font-family: 'Figtree', sans-serif; color: #202b22; box-shadow: 0 8px 32px rgba(28,36,48,0.10);">
+          <div style="background: #1e6b42; color: #fff; padding: 18px 20px 14px; display: flex; align-items: center; gap: 10px;">
+            <div style="font-weight: 800; font-size: 18px; letter-spacing: -0.2px;">🥎 RecMgr</div>
+            <div style="margin-left: auto; display: flex; gap: 6px; align-items: center;">
+              <div style="font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.14);">Alerts <span style="background: #ff5d47; border-radius: 99px; padding: 1px 6px; font-size: 11px;">2</span></div>
+              <div style="font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 8px;">Subs</div>
+            </div>
+          </div>
+          <div style="padding: 20px 18px 28px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 24px; font-weight: 800; letter-spacing: -0.4px; margin: 2px 0 4px;">My teams</div>
+
+            <div style="background: #fff; border-radius: 16px; border: 1px solid #e3e7df; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 3px rgba(30,50,40,0.05);">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <div style="font-size: 17px; font-weight: 700;">Thursday Coed Softball</div>
+                <div style="font-size: 13px; color: #6b7568;">Coed softball</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="font-size: 14px; color: #48524a;">Next: <strong style="color: #202b22;">Thu Jul 9 · 6:30 PM</strong> vs Brewhouse Bombers</div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                  <span style="font-weight: 700;">9 in</span><span style="color: #6b7568;">(6M / 3F)</span>
+                  <span style="background: #fdeceb; color: #b3261e; font-weight: 700; font-size: 12.5px; padding: 3px 10px; border-radius: 99px;">SHORT — need 1 more, 1F</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 2px;">
+                <div style="border: 1.5px solid #1e6b42; color: #1e6b42; font-weight: 700; font-size: 14px; padding: 9px 14px; border-radius: 10px;">Game details</div>
+                <div style="background: #1e6b42; color: #fff; font-weight: 700; font-size: 14px; padding: 9px 14px; border-radius: 10px;">Find subs</div>
+              </div>
+            </div>
+
+            <div style="background: #fff; border-radius: 16px; border: 1px solid #e3e7df; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 3px rgba(30,50,40,0.05);">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <div style="font-size: 17px; font-weight: 700;">Sunday Slowpitch</div>
+                <div style="font-size: 13px; color: #6b7568;">Mens slowpitch</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="font-size: 14px; color: #48524a;">Next: <strong style="color: #202b22;">Sun Jul 12 · 10:00 AM</strong> vs The Dingers</div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                  <span style="font-weight: 700;">12 in</span>
+                  <span style="background: #e2f2e7; color: #1e6b42; font-weight: 700; font-size: 12.5px; padding: 3px 10px; border-radius: 99px;">Covered ✓</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 2px;">
+                <div style="border: 1.5px solid #1e6b42; color: #1e6b42; font-weight: 700; font-size: 14px; padding: 9px 14px; border-radius: 10px;">Game details</div>
+              </div>
+            </div>
+
+            <div style="background: #1e6b42; color: #fff; font-weight: 700; font-size: 15px; padding: 13px; border-radius: 12px; text-align: center; margin-top: 4px;">+ New team</div>
+          </div>
+        </div>
+
+        <!-- 1a rsvp -->
+        <div style="width: 390px; background: #f6f7f4; border-radius: 28px; border: 1px solid #d8dcd4; overflow: hidden; font-family: 'Figtree', sans-serif; color: #202b22; box-shadow: 0 8px 32px rgba(28,36,48,0.10);">
+          <div style="background: #1e6b42; color: #fff; padding: 18px 20px 14px; display: flex; align-items: center;">
+            <div style="font-weight: 800; font-size: 18px;">🥎 Thursday Coed Softball</div>
+          </div>
+          <div style="padding: 20px 18px 28px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 2px;">
+              <div style="font-size: 24px; font-weight: 800; letter-spacing: -0.4px;">Hi Dave 👋</div>
+              <div style="font-size: 13.5px; color: #6b7568;">Not you? <span style="color: #1e6b42; font-weight: 600; text-decoration: underline;">Pick your name</span></div>
+            </div>
+
+            <div style="background: #fff; border-radius: 16px; border: 1px solid #e3e7df; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(30,50,40,0.05);">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 17px; font-weight: 700;">Thu Jul 9 · 6:30 PM vs Brewhouse Bombers</div>
+                <div style="font-size: 13.5px; color: #6b7568;">📍 Diamond 3, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #1e6b42; background: #e2f2e7; color: #1e6b42;">IN</div>
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #e3e7df; background: #fff; color: #48524a;">OUT</div>
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #e3e7df; background: #fff; color: #48524a;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13.5px; color: #6b7568; display: flex; align-items: center; gap: 6px;">▸ Who's in <span style="background: #e2f2e7; color: #1e6b42; font-weight: 700; border-radius: 99px; padding: 1px 8px; font-size: 12px;">9</span></div>
+            </div>
+
+            <div style="background: #fff; border-radius: 16px; border: 1px solid #e3e7df; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(30,50,40,0.05);">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 17px; font-weight: 700;">Thu Jul 16 · 6:30 PM vs Rally Cats</div>
+                <div style="font-size: 13.5px; color: #6b7568;">📍 Diamond 1, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #e3e7df; background: #fff; color: #48524a;">IN</div>
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #e3e7df; background: #fff; color: #48524a;">OUT</div>
+                <div style="padding: 14px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 12px; border: 2px solid #e3e7df; background: #fff; color: #48524a;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13.5px; color: #6b7568;">▸ Who's in <span style="background: #e2f2e7; color: #1e6b42; font-weight: 700; border-radius: 99px; padding: 1px 8px; font-size: 12px;">4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OPTION 1B — SCOREBOARD CLEAN ============ -->
+    <div id="1b" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="#1b" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; background: #1c2430; color: #fff; padding: 3px 8px; border-radius: 6px; text-decoration: none;">1b</a>
+        <div style="font-family: 'IBM Plex Sans', sans-serif; font-weight: 700; font-size: 16px; color: #1c2430;">Scoreboard Clean — cool, precise, utility-first</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: flex-start;">
+
+        <!-- 1b dashboard -->
+        <div style="width: 390px; background: #fbfbfc; border-radius: 28px; border: 1px solid #d9dce1; overflow: hidden; font-family: 'IBM Plex Sans', sans-serif; color: #171d26; box-shadow: 0 8px 32px rgba(23,29,38,0.10);">
+          <div style="background: #fbfbfc; border-bottom: 1px solid #e6e8ec; padding: 18px 20px 14px; display: flex; align-items: center; gap: 10px;">
+            <div style="font-weight: 700; font-size: 17px; letter-spacing: -0.2px;">RecMgr</div>
+            <div style="margin-left: auto; display: flex; gap: 14px; align-items: center; font-size: 13.5px; color: #58606c; font-weight: 500;">
+              <span>Subs</span>
+              <span style="color: #171d26; font-weight: 600;">Alerts <span style="background: #d64541; color: #fff; border-radius: 99px; padding: 1px 6px; font-size: 11px; font-weight: 600;">2</span></span>
+            </div>
+          </div>
+          <div style="padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 0;">
+            <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 14px;">My teams</div>
+
+            <div style="border-top: 1px solid #e6e8ec; padding: 16px 0; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="font-size: 16px; font-weight: 600;">Thursday Coed Softball</div>
+                <div style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8a919c;">COED</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #454d59;">THU JUL 9 · 6:30 PM</div>
+                <div style="font-size: 13.5px; color: #58606c;">vs Brewhouse Bombers</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 500;"><span style="color: #b3362f;">9</span><span style="color: #8a919c;">/10</span></div>
+                <div style="flex: 1; height: 6px; background: #e6e8ec; border-radius: 99px; overflow: hidden;"><div style="width: 90%; height: 100%; background: #b3362f;"></div></div>
+                <div style="font-size: 12.5px; font-weight: 600; color: #b3362f; text-transform: uppercase; letter-spacing: 0.4px;">Short · 1F</div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 4px;">
+                <div style="background: #17405f; color: #fff; font-weight: 600; font-size: 13.5px; padding: 8px 14px; border-radius: 8px;">Find subs</div>
+                <div style="border: 1px solid #cfd3da; color: #171d26; font-weight: 600; font-size: 13.5px; padding: 8px 14px; border-radius: 8px;">Details</div>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #e6e8ec; padding: 16px 0; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="font-size: 16px; font-weight: 600;">Sunday Slowpitch</div>
+                <div style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8a919c;">MENS</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #454d59;">SUN JUL 12 · 10:00 AM</div>
+                <div style="font-size: 13.5px; color: #58606c;">vs The Dingers</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 500;"><span style="color: #1f7a4d;">12</span><span style="color: #8a919c;">/10</span></div>
+                <div style="flex: 1; height: 6px; background: #e6e8ec; border-radius: 99px; overflow: hidden;"><div style="width: 100%; height: 100%; background: #1f7a4d;"></div></div>
+                <div style="font-size: 12.5px; font-weight: 600; color: #1f7a4d; text-transform: uppercase; letter-spacing: 0.4px;">Covered</div>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #e6e8ec; padding-top: 16px;">
+              <div style="border: 1px dashed #b8bdc6; color: #454d59; font-weight: 600; font-size: 14px; padding: 12px; border-radius: 10px; text-align: center;">+ New team</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1b rsvp -->
+        <div style="width: 390px; background: #fbfbfc; border-radius: 28px; border: 1px solid #d9dce1; overflow: hidden; font-family: 'IBM Plex Sans', sans-serif; color: #171d26; box-shadow: 0 8px 32px rgba(23,29,38,0.10);">
+          <div style="background: #fbfbfc; border-bottom: 1px solid #e6e8ec; padding: 18px 20px 14px;">
+            <div style="font-weight: 700; font-size: 17px;">Thursday Coed Softball</div>
+          </div>
+          <div style="padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 0;">
+            <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px;">
+              <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.3px;">Hi Dave</div>
+              <div style="font-size: 13px; color: #8a919c;">Not you? <span style="color: #17405f; font-weight: 600; text-decoration: underline;">Pick your name</span></div>
+            </div>
+
+            <div style="border-top: 1px solid #e6e8ec; padding: 16px 0; display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #454d59;">THU JUL 9 · 6:30 PM</div>
+                <div style="font-size: 16px; font-weight: 600;">vs Brewhouse Bombers</div>
+                <div style="font-size: 13px; color: #8a919c;">Diamond 3, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 1px solid #cfd3da; border-radius: 10px; overflow: hidden;">
+                <div style="padding: 13px 0; text-align: center; font-weight: 700; font-size: 14px; background: #17405f; color: #fff;">IN</div>
+                <div style="padding: 13px 0; text-align: center; font-weight: 600; font-size: 14px; background: #fff; color: #454d59; border-left: 1px solid #cfd3da;">OUT</div>
+                <div style="padding: 13px 0; text-align: center; font-weight: 600; font-size: 14px; background: #fff; color: #454d59; border-left: 1px solid #cfd3da;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13px; color: #58606c;">▸ Who's in <span style="font-family: 'IBM Plex Mono', monospace; color: #1f7a4d; font-weight: 500;">9/14</span></div>
+            </div>
+
+            <div style="border-top: 1px solid #e6e8ec; padding: 16px 0; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #454d59;">THU JUL 16 · 6:30 PM</div>
+                <div style="font-size: 16px; font-weight: 600;">vs Rally Cats</div>
+                <div style="font-size: 13px; color: #8a919c;">Diamond 1, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 1px solid #cfd3da; border-radius: 10px; overflow: hidden;">
+                <div style="padding: 13px 0; text-align: center; font-weight: 600; font-size: 14px; background: #fff; color: #454d59;">IN</div>
+                <div style="padding: 13px 0; text-align: center; font-weight: 600; font-size: 14px; background: #fff; color: #454d59; border-left: 1px solid #cfd3da;">OUT</div>
+                <div style="padding: 13px 0; text-align: center; font-weight: 600; font-size: 14px; background: #fff; color: #454d59; border-left: 1px solid #cfd3da;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13px; color: #58606c;">▸ Who's in <span style="font-family: 'IBM Plex Mono', monospace; color: #1f7a4d; font-weight: 500;">4/14</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OPTION 1C — GAME DAY ============ -->
+    <div id="1c" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="#1c" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; background: #1c2430; color: #fff; padding: 3px 8px; border-radius: 6px; text-decoration: none;">1c</a>
+        <div style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 16px; color: #1c2430;">Game Day — bold, high-energy, team spirit</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: flex-start;">
+
+        <!-- 1c dashboard -->
+        <div style="width: 390px; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Archivo', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+          <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px; display: flex; align-items: center; gap: 10px;">
+            <div style="font-weight: 900; font-size: 19px; letter-spacing: 0.5px; text-transform: uppercase;">RecMgr</div>
+            <div style="margin-left: auto; display: flex; gap: 10px; align-items: center; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+              <span style="opacity: 0.7;">Subs</span>
+              <span>Alerts <span style="background: #f2542d; border-radius: 99px; padding: 1px 7px; font-size: 11px;">2</span></span>
+            </div>
+          </div>
+          <div style="padding: 22px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="font-size: 28px; font-weight: 900; letter-spacing: -0.5px; text-transform: uppercase;">My teams</div>
+
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <div style="font-size: 18px; font-weight: 900; letter-spacing: -0.2px;">Thursday Coed Softball</div>
+                </div>
+                <div style="font-size: 14px; color: #4b5265; font-weight: 500;">Thu Jul 9 · 6:30 PM vs <strong style="color: #1b2233;">Brewhouse Bombers</strong></div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="font-size: 26px; font-weight: 900;">9<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+                  <div style="font-size: 12px; color: #8a8fa0; font-weight: 600; text-transform: uppercase;">6M · 3F</div>
+                </div>
+              </div>
+              <div style="background: #f2542d; color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 8px;">
+                <div style="font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px;">Short — need 1 more · 1F</div>
+                <div style="margin-left: auto; background: #fff; color: #f2542d; font-weight: 900; font-size: 12px; text-transform: uppercase; padding: 6px 12px; border-radius: 8px;">Find subs</div>
+              </div>
+            </div>
+
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; overflow: hidden; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 18px; font-weight: 900;">Sunday Slowpitch</div>
+                <div style="font-size: 14px; color: #4b5265; font-weight: 500;">Sun Jul 12 · 10:00 AM vs <strong style="color: #1b2233;">The Dingers</strong></div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="font-size: 26px; font-weight: 900;">12<span style="font-size: 15px; color: #8a8fa0; font-weight: 700;">/10</span></div>
+                </div>
+              </div>
+              <div style="background: #2a9d5c; color: #fff; padding: 10px 16px;">
+                <div style="font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px;">Covered ✓</div>
+              </div>
+            </div>
+
+            <div style="background: #1b2233; color: #fff; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; padding: 14px; border-radius: 12px; text-align: center;">+ New team</div>
+          </div>
+        </div>
+
+        <!-- 1c rsvp -->
+        <div style="width: 390px; background: #f7f3ea; border-radius: 28px; border: 1px solid #ddd5c4; overflow: hidden; font-family: 'Archivo', sans-serif; color: #1b2233; box-shadow: 0 8px 32px rgba(27,34,51,0.12);">
+          <div style="background: #1b2233; color: #fff; padding: 20px 20px 16px;">
+            <div style="font-weight: 900; font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;">Thursday Coed Softball</div>
+          </div>
+          <div style="padding: 22px 18px 28px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">HI DAVE 👋</div>
+              <div style="font-size: 13.5px; color: #6d7385; font-weight: 500;">Not you? <span style="color: #1b2233; font-weight: 700; text-decoration: underline;">Pick your name</span></div>
+            </div>
+
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.8px;">Thu Jul 9 · 6:30 PM</div>
+                <div style="font-size: 19px; font-weight: 900;">vs Brewhouse Bombers</div>
+                <div style="font-size: 13px; color: #6d7385; font-weight: 500;">📍 Diamond 3, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div style="padding: 15px 0; text-align: center; font-weight: 900; font-size: 15px; border-radius: 10px; background: #2a9d5c; color: #fff; border: 2px solid #1b2233; box-shadow: 2px 2px 0 #1b2233;">IN</div>
+                <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">OUT</div>
+                <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13px; color: #6d7385; font-weight: 600;">▸ WHO'S IN <span style="background: #1b2233; color: #fff; font-weight: 800; border-radius: 99px; padding: 1px 8px; font-size: 12px;">9</span></div>
+            </div>
+
+            <div style="background: #fff; border-radius: 14px; border: 2px solid #1b2233; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 4px 4px 0 #1b2233;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 12px; font-weight: 800; color: #f2542d; text-transform: uppercase; letter-spacing: 0.8px;">Thu Jul 16 · 6:30 PM</div>
+                <div style="font-size: 19px; font-weight: 900;">vs Rally Cats</div>
+                <div style="font-size: 13px; color: #6d7385; font-weight: 500;">📍 Diamond 1, Riverside Park</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">IN</div>
+                <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">OUT</div>
+                <div style="padding: 15px 0; text-align: center; font-weight: 800; font-size: 15px; border-radius: 10px; background: #fff; color: #1b2233; border: 2px solid #c9cdd8;">T.B.D.</div>
+              </div>
+              <div style="font-size: 13px; color: #6d7385; font-weight: 600;">▸ WHO'S IN <span style="background: #1b2233; color: #fff; font-weight: 800; border-radius: 99px; padding: 1px 8px; font-size: 12px;">4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

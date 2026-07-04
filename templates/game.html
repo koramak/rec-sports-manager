@@ -1,72 +1,103 @@
 {% extends "base.html" %}
-{% block title %}Game {{ game.game_dt }} — RecMgr{% endblock %}
+{% block title %}{{ game.game_dt | gamedt }} — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ url_for('team_manage', team_id=team.id) }}">←</a>
+  <div class="pb-text">
+    <div class="pb-eyebrow">{{ game.game_dt | gamedt }}</div>
+    <div class="pb-title">vs {{ game.opponent or "TBD" }}</div>
+  </div>
+</div>
+{% endblock %}
 {% block content %}
-<h1>{{ game.game_dt }} vs {{ game.opponent or "TBD" }}</h1>
-<p class="sub">{{ team.name }} · {{ game.location or "Location TBD" }}
-  {% if game.notes %}· {{ game.notes }}{% endif %}</p>
-<div class="btnrow">
-  <a class="btn small ghost" href="{{ url_for('game_edit', game_id=game.id) }}">Edit game</a>
-  <a class="btn small ghost" href="{{ url_for('team_manage', team_id=team.id) }}">← {{ team.name }}</a>
+<div class="desk-title">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+    <div>
+      <div class="eyebrow">{{ game.game_dt | gamedt }}</div>
+      <h1 style="margin:0;">vs {{ game.opponent or "TBD" }}</h1>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <a class="btn small outline" href="{{ url_for('game_edit', game_id=game.id) }}">Edit game</a>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-  <h3>Headcount</h3>
-  <p class="counts">
-    <strong>{{ counts.total }}</strong> in ({{ counts.male }}M / {{ counts.female }}F)
-    — need {{ team.min_players }}{% if team.min_male %}, {{ team.min_male }}M{% endif %}{% if team.min_female %}, {{ team.min_female }}F{% endif %}<br>
-    {% if problems %}
-      <span class="short">SHORT: {{ problems | join(", ") }}</span> — pick subs below.
-    {% else %}
-      <span class="ok">Minimums covered ✓</span>
-    {% endif %}
-  </p>
+<div class="meta-line" style="margin-bottom:14px;">{{ team.name }} · {{ game.location or "Location TBD" }}{% if game.notes %} · {{ game.notes }}{% endif %}
+  <a class="edit-link mobile-only" style="margin-left:6px;" href="{{ url_for('game_edit', game_id=game.id) }}">Edit</a>
 </div>
 
-<h2>Roster RSVPs</h2>
-<div class="card">
-  <table class="list">
-    <tr><th>Player</th><th>G</th><th>Status</th></tr>
+<div class="card flush">
+  <div class="card-body" style="display:flex;align-items:center;gap:14px;">
+    <div class="headnum big">{{ counts.total }}<span class="denom">/{{ team.min_players }}</span></div>
+    <div>
+      <div class="gender-caps" style="font-weight:800;">Headcount</div>
+      <div class="meta-line" style="font-weight:600;">{{ counts.male }}M · {{ counts.female }}F — need {{ team.min_players }}{% if team.min_female %}, {{ team.min_female }}F{% endif %}{% if team.min_male %}, {{ team.min_male }}M{% endif %}</div>
+    </div>
+  </div>
+  {% if short %}
+    <div class="strip short"><span>Short{% if short.more %} {{ short.more }} player{{ "s" if short.more > 1 }}{% endif %}{% if short.genders %}, {{ short.genders }}{% endif %} — pick subs below</span></div>
+  {% else %}
+    <div class="strip ok"><span>Covered ✓</span></div>
+  {% endif %}
+</div>
+
+<div class="section-h">Roster RSVPs</div>
+<div class="card flush">
+  <div class="list-rows">
     {% for r in rows %}
-      <tr>
-        <td>{{ short_name(r.player.name) }}</td>
-        <td>{{ r.player.gender }}</td>
-        <td><span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span></td>
-      </tr>
+      <div class="list-row">
+        <div class="lr-main"><div class="lr-name">{{ short_name(r.player.name) }} <span class="g">{{ r.player.gender }}</span></div></div>
+        <span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span>
+      </div>
     {% endfor %}
-  </table>
+  </div>
 </div>
 
-<h2>Subs</h2>
 {% if sub_rows %}
-<div class="card">
-  <table class="list">
-    <tr><th>Sub</th><th>G</th><th>Status</th></tr>
+<div class="section-h">Subs</div>
+<div class="card flush">
+  <div class="list-rows">
     {% for s in sub_rows %}
-      <tr>
-        <td>{{ short_name(s.name) }}</td>
-        <td>{{ s.gender }}</td>
-        <td><span class="status-pill status-{{ s.status }}">{{ s.status | upper }}</span></td>
-      </tr>
+      <div class="list-row">
+        <div class="lr-main"><div class="lr-name">{{ short_name(s.name) }} <span class="g">{{ s.gender }}</span></div></div>
+        <span class="status-pill status-{{ s.status }}">{{ s.status | upper }}</span>
+      </div>
     {% endfor %}
-  </table>
+  </div>
 </div>
 {% endif %}
 
+<div class="section-h" id="invite-subs">Invite subs</div>
 <div class="card">
-  <h3>Invite subs</h3>
   {% if pool %}
-    <p class="sub">Each selected sub gets their own personal link for this game only.</p>
-    <form method="post" action="{{ url_for('invite_sub', game_id=game.id) }}" class="stack">
+    <div class="sub">Each sub gets a personal link for this game only.</div>
+    <form method="post" action="{{ url_for('invite_sub', game_id=game.id) }}" id="sub-form">
       {% for p in pool %}
-        <label style="display:flex;align-items:center;gap:8px;margin:6px 0;">
+        <label class="check-row">
           <input type="checkbox" name="player_id" value="{{ p.id }}">
-          {{ p.name }} ({{ p.gender }}{% if p.positions %} · {{ p.positions }}{% endif %}{% if p.skill %} · {{ p.skill }}{% endif %})
+          <span class="box"></span>
+          <span>{{ p.name }} <span class="meta">{{ p.gender }}{% if p.positions %} · {{ p.positions }}{% endif %}{% if p.skill %} · {{ p.skill }}{% endif %}</span></span>
         </label>
       {% endfor %}
-      <button class="btn" type="submit">Send sub invites</button>
+      <button class="btn primary block" type="submit" id="sub-btn">Select subs</button>
     </form>
   {% else %}
     <p class="sub">No available subs in your pool. <a href="{{ url_for('sub_new') }}">Add subs</a>.</p>
   {% endif %}
 </div>
+
+<script>
+const form = document.getElementById('sub-form');
+if (form) {
+  const btn = document.getElementById('sub-btn');
+  const update = () => {
+    const n = form.querySelectorAll('input[name=player_id]:checked').length;
+    btn.textContent = n ? `Send ${n} sub invite${n > 1 ? 's' : ''}` : 'Select subs';
+    btn.disabled = !n;
+  };
+  form.addEventListener('change', update);
+  update();
+}
+</script>
 {% endblock %}

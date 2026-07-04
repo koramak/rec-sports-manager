@@ -2,26 +2,24 @@
 {% block title %}Sub pool — RecMgr{% endblock %}
 {% block content %}
 <h1>My sub pool</h1>
-<p class="sub">Subs only get a link when you personally invite them to a specific game.</p>
-<div class="card">
-  <table class="list">
-    <tr><th>Sub</th><th>G</th><th>Contact</th><th></th></tr>
+<p class="sub" style="margin-top:-8px;margin-bottom:14px;">Subs only get a link when you personally invite them to a specific game.</p>
+<div class="card flush">
+  <div class="rows-head"><div>Sub</div><div>G</div><div>Contact</div><div></div></div>
+  <div class="list-rows">
     {% for p in pool %}
-      <tr>
-        <td>
-          <strong>{{ p.name }}</strong>
-          {% if p.positions %}<div class="sub">{{ p.positions }}{% if p.skill %} · {{ p.skill }}{% endif %}</div>{% endif %}
-        </td>
-        <td>{{ p.gender }}</td>
-        <td class="sub">{{ p.phone or p.email }}</td>
-        <td class="right">
-          <a class="btn small ghost" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
-        </td>
-      </tr>
+      <div class="list-row roster-row">
+        <div class="lr-main">
+          <div class="lr-name">{{ p.name }}</div>
+          <div class="lr-meta">{{ p.positions or "—" }}{% if p.skill %} · {{ p.skill }}{% endif %}<span class="contact-inline"> · {{ p.phone or p.email }}</span></div>
+        </div>
+        <div class="lr-g">{{ p.gender }}</div>
+        <div class="lr-contact">{{ p.phone or p.email }}</div>
+        <a class="edit-link" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
+      </div>
     {% else %}
-      <tr><td colspan="4" class="sub">No subs yet.</td></tr>
+      <div class="list-row"><div class="sub">No subs yet.</div></div>
     {% endfor %}
-  </table>
+  </div>
 </div>
-<a class="btn" href="{{ url_for('sub_new') }}">+ Add sub</a>
+<a class="btn dashed" href="{{ url_for('sub_new') }}">+ Add sub</a>
 {% endblock %}

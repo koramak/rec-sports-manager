@@ -3,10 +3,7 @@
 {% block content %}
 <div class="dash-grid">
   <div class="dash-main">
-    <div class="dash-head">
-      <h1>My teams</h1>
-      <a class="btn desk-only" href="{{ url_for('team_new') }}">+ New team</a>
-    </div>
+    <h1>My teams</h1>
 
     <div class="team-cards">
       {% for c in cards %}
@@ -35,12 +32,9 @@
             {% endif %}
           {% endif %}
         </div>
-      {% else %}
-        <div class="card"><p class="sub">No teams yet. Create your first team to get started.</p></div>
       {% endfor %}
+      <a class="add-tile" href="{{ url_for('team_new') }}">+ New team</a>
     </div>
-
-    <a class="btn block mobile-only" href="{{ url_for('team_new') }}" style="margin-top:14px;">+ New team</a>
 
     <div class="scheduler-note">Scheduler runs every minute: RSVP requests, daily reminders, 72-hour checks, tournament reminders.
       <form method="post" action="{{ url_for('tick') }}" class="inline-form"><button type="submit">Run now</button></form>

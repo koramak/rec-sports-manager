@@ -316,6 +316,16 @@ details.whos-in .list-row { padding: 8px 0; }
 .check-row input:checked + .box::after { content: "✓"; }
 .check-row .meta { color: var(--muted2); font-weight: 600; font-size: 12.5px; }
 
+/* dashed ghost tile that lives inside the team-cards grid */
+.add-tile {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 72px; padding: 20px; margin-bottom: 14px;
+  border: 2px dashed var(--dash-btn); border-radius: 14px;
+  color: var(--body2); text-decoration: none;
+  font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.add-tile:hover { border-color: var(--ink); color: var(--ink); }
+
 /* players page filters */
 .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .filters input[type=text] { grid-column: 1 / -1; }
@@ -374,11 +384,8 @@ table.list tr:last-child td { border-bottom: 0; }
   .dash-main { flex: 1; min-width: 0; max-width: 812px; }
   .dash-side { width: 320px; flex: none; }
   .dash-side .section-h { margin-top: 0; }
-  .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
-  .team-cards .card { margin-bottom: 0; }
-  .dash-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-  .dash-head h1 { margin: 0; }
-  .dash-head .btn { margin-left: auto; padding: 11px 18px; font-size: 13px; border-radius: 10px; }
+  .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; margin-bottom: 14px; }
+  .team-cards .card, .team-cards .add-tile { margin-bottom: 0; }
 
   /* team page: two columns */
   .team-cols { display: flex; gap: 24px; align-items: flex-start; }

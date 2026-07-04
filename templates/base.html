@@ -25,7 +25,7 @@
   {% endif %}
 </header>
 {% block pagebar %}{% endblock %}
-<main>
+<main class="{% block mainclass %}{% endblock %}">
   {% with messages = get_flashed_messages() %}
     {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
   {% endwith %}

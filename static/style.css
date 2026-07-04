@@ -347,6 +347,9 @@ table.list tr:last-child td { border-bottom: 0; }
 /* ================================================================ desktop */
 @media (min-width: 900px) {
   main { max-width: 1160px; padding: 32px; }
+  /* pages without a designed desktop layout stay column-shaped, centered */
+  main.narrow { max-width: 640px; }
+  main.mid { max-width: 880px; }
   .mobile-only { display: none !important; }
   .topbar { padding: 16px 32px; gap: 28px; }
   .topbar nav { margin-left: 0; gap: 22px; }
@@ -360,10 +363,10 @@ table.list tr:last-child td { border-bottom: 0; }
 
   /* dashboard: content + 320px alerts sidebar; team cards 2-up */
   .dash-grid { display: flex; gap: 28px; align-items: flex-start; }
-  .dash-main { flex: 1; min-width: 0; }
+  .dash-main { flex: 1; min-width: 0; max-width: 812px; }
   .dash-side { width: 320px; flex: none; }
   .dash-side .section-h { margin-top: 0; }
-  .team-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
   .team-cards .card { margin-bottom: 0; }
   .dash-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
   .dash-head h1 { margin: 0; }

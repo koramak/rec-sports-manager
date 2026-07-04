@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block mainclass %}narrow{% endblock %}
 {% block title %}{{ "Edit player" if player else ("New sub" if is_sub else "New player") }} — RecMgr{% endblock %}
 {% block bodyclass %}has-pagebar{% endblock %}
 {% block pagebar %}

@@ -433,14 +433,25 @@ def player_delete(player_id):
     return redirect(request.args.get("next") or url_for("dashboard"))
 
 
+def demote_to_sub(con, team_id, player_id):
+    """Take a player off a team roster without deleting them. Once they're on
+    no roster at all they become part of the manager's sub pool."""
+    con.execute("DELETE FROM team_players WHERE team_id=? AND player_id=?",
+                (team_id, player_id))
+    if not con.execute("SELECT 1 FROM team_players WHERE player_id=?",
+                       (player_id,)).fetchone():
+        con.execute("UPDATE players SET is_sub=1 WHERE id=?", (player_id,))
+
+
 @app.route("/team/<team_id>/roster/remove/<player_id>", methods=["POST"])
 @login_required
 def roster_remove(team_id, player_id):
     get_team_or_404(team_id, manage=True)
+    p = get_player_or_404(player_id)
     con = get_con()
-    con.execute("DELETE FROM team_players WHERE team_id=? AND player_id=?",
-                (team_id, player_id))
+    demote_to_sub(con, team_id, player_id)
     con.commit()
+    flash("%s moved off the roster into your sub pool." % p["name"])
     return redirect(url_for("team_manage", team_id=team_id))
 
 
@@ -705,6 +716,89 @@ def tournament_invite(tournament_id):
     con.commit()
     flash("Invite(s) sent.")
     return redirect(url_for("tournament_view", tournament_id=tournament_id))
+
+
+@app.route("/tournament/<int:tournament_id>/remove/<player_id>", methods=["POST"])
+@login_required
+def tournament_remove(tournament_id, player_id):
+    con = get_con()
+    t = con.execute("SELECT * FROM tournaments WHERE id=?", (tournament_id,)).fetchone()
+    if not t:
+        abort(404)
+    team = get_team_or_404(t["team_id"], manage=True)
+    p = con.execute("SELECT * FROM players WHERE id=?", (player_id,)).fetchone()
+    if not p:
+        abort(404)
+    con.execute("DELETE FROM tournament_invites WHERE tournament_id=? AND player_id=?",
+                (tournament_id, player_id))
+    con.execute("DELETE FROM rsvps WHERE event_type='tournament' AND event_id=? AND player_id=?",
+                (tournament_id, player_id))
+    if p["is_sub"]:
+        flash("%s removed from the tournament." % p["name"])
+    else:
+        # roster players aren't deleted — they convert to subs
+        demote_to_sub(con, team["id"], player_id)
+        flash("%s removed from the tournament and moved to your sub pool." % p["name"])
+    con.commit()
+    return redirect(url_for("tournament_view", tournament_id=tournament_id))
+
+
+# ------------------------------------------------------------ messaging
+
+@app.route("/team/<team_id>/message", methods=["GET", "POST"])
+@login_required
+def team_message(team_id):
+    team = get_team_or_404(team_id, manage=True)
+    con = get_con()
+    tournament = None
+    tid = request.args.get("tournament", type=int)
+    if tid:
+        tournament = con.execute(
+            "SELECT * FROM tournaments WHERE id=? AND team_id=?",
+            (tid, team_id)).fetchone()
+        if not tournament:
+            abort(404)
+    if tournament:
+        recipients = con.execute(
+            """SELECT p.* FROM players p JOIN tournament_invites ti ON ti.player_id=p.id
+               WHERE ti.tournament_id=? ORDER BY p.name""",
+            (tournament["id"],)).fetchall()
+    else:
+        recipients = notify.rostered_players(con, team_id)
+    next_game = con.execute(
+        "SELECT * FROM games WHERE team_id=? AND game_dt>=? ORDER BY game_dt LIMIT 1",
+        (team_id, datetime.now().strftime(notify.DT_FMT))).fetchone()
+
+    if request.method == "POST":
+        body = request.form.get("body", "").strip()
+        if not body:
+            flash("Write a message first.")
+        else:
+            targets = recipients
+            if tournament and request.form.get("only_in"):
+                targets = [p for p in recipients if notify.rsvp_status(
+                    con, "tournament", tournament["id"], p["id"]) == "in"]
+            now = datetime.now()
+            sent = skipped = 0
+            for p in targets:
+                if not notify.contact_key(p):
+                    skipped += 1
+                    continue
+                notify.send_now(con, p, notify.expand_wildcards(
+                    body, p, team, game=next_game, tournament=tournament), now)
+                sent += 1
+            con.commit()
+            msg = "Message sent to %d player(s)." % sent
+            if skipped:
+                msg += " Skipped %d with no phone or email." % skipped
+            flash(msg)
+            if tournament:
+                return redirect(url_for("tournament_view", tournament_id=tournament["id"]))
+            return redirect(url_for("team_manage", team_id=team_id))
+    sample = (notify.wildcard_values(recipients[0], team, game=next_game,
+                                     tournament=tournament) if recipients else {})
+    return render_template("message_form.html", team=team, tournament=tournament,
+                           recipients=recipients, sample=sample)
 
 
 # ------------------------------------------------------------ alerts / outbox / admin

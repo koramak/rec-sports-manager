@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block mainclass %}narrow{% endblock %}
+{% block title %}Message players — RecMgr{% endblock %}
+{% block bodyclass %}has-pagebar{% endblock %}
+{% set back_url = url_for('tournament_view', tournament_id=tournament.id) if tournament else url_for('team_manage', team_id=team.id) %}
+{% block pagebar %}
+<div class="pagebar">
+  <a class="back" href="{{ back_url }}">←</a>
+  <div class="pb-text">
+    <div class="pb-eyebrow">{{ tournament.name if tournament else team.name }}</div>
+    <div class="pb-title">Message players</div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+<h1 class="desk-title">Message players</h1>
+<p class="sub" style="margin-top:-6px;">
+  {% if tournament %}
+    Sends individually to everyone invited to <strong>{{ tournament.name }}</strong> — {{ recipients | length }} player(s).
+  {% else %}
+    Sends individually to everyone on the <strong>{{ team.name }}</strong> roster — {{ recipients | length }} player(s).
+  {% endif %}
+  Players with a phone get a text; email otherwise.
+</p>
+
+{% if recipients %}
+<form method="post" class="stack">
+  <label>Message</label>
+  <textarea name="body" id="msg-body" required
+            placeholder="Hey {first}, {team} plays {{ '{tournament} on {date}' if tournament else '{game}' }} — you in? {link}"></textarea>
+
+  <div class="field-label" style="margin-top:10px;">Wildcards <span class="opt">— tap to insert; filled in per player</span></div>
+  <div class="wild-chips">
+    {% for key in sample %}
+      <button class="wild-chip" type="button" data-wild="{{ '{' ~ key ~ '}' }}">{{ '{' ~ key ~ '}' }}</button>
+    {% endfor %}
+  </div>
+
+  {% if tournament %}
+    <label class="check-row" style="margin-top:12px;">
+      <input type="checkbox" name="only_in">
+      <span class="box"></span>
+      <span>Only players marked IN</span>
+    </label>
+  {% endif %}
+
+  <div class="field-label" style="margin-top:12px;">Preview <span class="opt">— as {{ recipients[0].name }} will see it</span></div>
+  <div class="msg-preview" id="msg-preview">Start typing to preview…</div>
+
+  <button class="btn primary block" type="submit">Send to players</button>
+</form>
+<a class="cancel-link" href="{{ back_url }}">Cancel</a>
+
+<script>
+const SAMPLE = {{ sample | tojson }};
+const body = document.getElementById('msg-body');
+const preview = document.getElementById('msg-preview');
+function renderPreview() {
+  const text = body.value;
+  preview.textContent = text
+    ? text.replace(/\{(\w+)\}/g, (m, k) => SAMPLE[k.toLowerCase()] ?? m)
+    : 'Start typing to preview…';
+}
+body.addEventListener('input', renderPreview);
+document.querySelectorAll('.wild-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const at = body.selectionStart ?? body.value.length;
+    body.value = body.value.slice(0, at) + chip.dataset.wild + body.value.slice(body.selectionEnd ?? at);
+    body.focus();
+    body.selectionStart = body.selectionEnd = at + chip.dataset.wild.length;
+    renderPreview();
+  });
+});
+renderPreview();
+</script>
+{% else %}
+<div class="card"><p class="sub">No players to message yet{% if tournament %} — invite some first{% endif %}.</p></div>
+{% endif %}
+</div>
+{% endblock %}

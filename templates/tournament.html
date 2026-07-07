@@ -18,14 +18,16 @@
       <div class="eyebrow">Tournament · {{ t.date | fmtdate }}</div>
       <h1 style="margin:0;">{{ t.name }}</h1>
     </div>
-    <div style="margin-left:auto;">
+    <div style="margin-left:auto;display:flex;gap:8px;">
       <a class="btn small outline" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
+      <a class="btn small" href="{{ url_for('team_message', team_id=team.id, tournament=t.id) }}">Message players</a>
     </div>
   </div>
 </div>
 
 <div class="meta-line" style="margin-bottom:14px;">{{ t.division }} · {{ t.location or "Location TBD" }}{% if t.host %} · hosted by {{ t.host }}{% endif %}{% if t.cost %} · ~${{ "%.0f" | format(t.cost) }}/person{% endif %}
   <a class="edit-link mobile-only" style="margin-left:6px;" href="{{ url_for('tournament_edit', tournament_id=t.id) }}">Edit</a>
+  <a class="edit-link mobile-only" style="margin-left:6px;" href="{{ url_for('team_message', team_id=team.id, tournament=t.id) }}">Message</a>
 </div>
 
 <div class="card flush">
@@ -38,6 +40,10 @@
       <div class="list-row">
         <div class="lr-main"><div class="lr-name">{{ short_name(r.player.name) }} <span class="g">{{ r.player.gender }}</span></div></div>
         <span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span>
+        <form method="post" action="{{ url_for('tournament_remove', tournament_id=t.id, player_id=r.player.id) }}"
+              onsubmit="return confirm('Remove {{ short_name(r.player.name) }} from this tournament?{% if not r.player.is_sub %} They will move to your sub pool.{% endif %}')">
+          <button class="row-remove" type="submit" title="Remove from tournament">✕</button>
+        </form>
       </div>
     {% else %}
       <div class="list-row"><div class="sub">No one invited yet.</div></div>

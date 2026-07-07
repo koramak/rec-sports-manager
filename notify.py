@@ -6,6 +6,7 @@ gateway stub) — one consolidated message per contact per tick, so a player
 on multiple teams gets a single batched text instead of several.
 """
 import os
+import re
 from datetime import datetime, timedelta
 
 DT_FMT = "%Y-%m-%d %H:%M"
@@ -91,6 +92,40 @@ def send_now(con, player, line, now):
     c = Collector()
     c.add(player, line)
     c.flush(con, now)
+
+
+# ---------------------------------------------------------------- wildcards
+
+def wildcard_values(player, team, game=None, tournament=None):
+    """What each {wildcard} expands to for one player. Game/tournament keys
+    only exist when there's a game/tournament in scope."""
+    name = (player["name"] or "").strip()
+    vals = {
+        "first": name.split()[0] if name.split() else name,
+        "name": name,
+        "team": team["name"],
+        "link": player_link(team["id"], player["id"]),
+    }
+    if game is not None:
+        vals["game"] = "%s on %s at %s" % (
+            matchup(game), fmt_gamedt(game["game_dt"]), game["location"] or "TBD")
+    if tournament is not None:
+        vals.update({
+            "tournament": tournament["name"],
+            "date": fmt_date(tournament["date"]),
+            "location": tournament["location"] or "TBD",
+            "division": tournament["division"] or "Coed",
+            "cost": "~$%.0f/person" % tournament["cost"] if tournament["cost"] else "cost TBD",
+        })
+    return vals
+
+
+def expand_wildcards(body, player, team, game=None, tournament=None):
+    """Personalize a message: {first}, {team}, {link}… per player.
+    Unknown wildcards are left exactly as typed."""
+    vals = wildcard_values(player, team, game=game, tournament=tournament)
+    return re.sub(r"\{(\w+)\}",
+                  lambda m: vals.get(m.group(1).lower(), m.group(0)), body)
 
 
 # ---------------------------------------------------------------- counts

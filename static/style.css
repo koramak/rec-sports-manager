@@ -213,6 +213,28 @@ input::placeholder, textarea::placeholder { color: var(--muted2); font-weight: 5
   font-size: 12px; font-weight: 800; color: var(--ink);
   text-transform: uppercase; letter-spacing: 0.06em; text-decoration: underline;
 }
+.row-remove {
+  background: none; border: 0; padding: 2px 4px; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 800; line-height: 1;
+  color: var(--muted2);
+}
+.row-remove:hover { color: var(--danger); }
+
+/* ------------------------------------------------------- message compose */
+.wild-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wild-chip {
+  font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  font-size: 12.5px; padding: 4px 10px; cursor: pointer;
+  background: #fff; border: 1px solid var(--dash-box); border-radius: 99px;
+  color: var(--ink);
+}
+.wild-chip:hover { border-color: var(--ink); }
+.msg-preview {
+  padding: 12px 14px; background: #fff;
+  border: 1px dashed var(--dash-box); border-radius: 10px;
+  font-size: 13.5px; font-weight: 500; color: var(--body2);
+  white-space: pre-wrap; word-break: break-word;
+}
 
 /* ---------------------------------------------------------------- pills */
 .status-pill {
@@ -396,13 +418,13 @@ table.list tr:last-child td { border-bottom: 0; }
 
   /* roster rows become a table-like grid */
   .rows-head {
-    display: grid; grid-template-columns: minmax(0, 1fr) 28px 44px; gap: 8px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 28px 44px 22px; gap: 8px;
     padding: 10px 18px; background: var(--bg); border-bottom: 1px solid var(--hairline);
     font-size: 11px; font-weight: 800; color: var(--muted2);
     text-transform: uppercase; letter-spacing: 0.08em;
   }
   .list-row.roster-row {
-    display: grid; grid-template-columns: minmax(0, 1fr) 28px 44px; gap: 8px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 28px 44px 22px; gap: 8px;
     padding: 11px 18px; align-items: center;
   }
   .roster-row .lr-name { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

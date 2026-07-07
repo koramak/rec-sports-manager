@@ -17,6 +17,7 @@
     <div style="margin-left:auto;display:flex;gap:8px;">
       <a class="btn small outline" href="{{ url_for('team_settings', team_id=team.id) }}">Settings</a>
       <a class="btn small outline" href="{{ url_for('player_import', team_id=team.id) }}">Import players</a>
+      <a class="btn small outline" href="{{ url_for('team_message', team_id=team.id) }}">Message players</a>
       <a class="btn small" href="{{ url_for('game_new', team_id=team.id) }}">+ Add game</a>
     </div>
   </div>
@@ -27,6 +28,7 @@
   <div style="margin-left:auto;display:flex;gap:6px;">
     <a class="btn small outline" href="{{ url_for('team_settings', team_id=team.id) }}">Settings</a>
     <a class="btn small outline" href="{{ url_for('player_import', team_id=team.id) }}">Import</a>
+    <a class="btn small outline" href="{{ url_for('team_message', team_id=team.id) }}">Message</a>
   </div>
 </div>
 
@@ -84,7 +86,7 @@
       <a class="edit-link desk-only" style="margin-left:auto;" href="{{ url_for('player_new', team_id=team.id) }}">+ Add player</a>
     </div>
     <div class="card flush">
-      <div class="rows-head"><div>Player</div><div>G</div><div></div></div>
+      <div class="rows-head"><div>Player</div><div>G</div><div></div><div></div></div>
       <div class="list-rows">
         {% for p in roster %}
           <div class="list-row roster-row">
@@ -94,6 +96,10 @@
             </div>
             <div class="lr-g">{{ p.gender }}</div>
             <a class="edit-link" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
+            <form method="post" action="{{ url_for('roster_remove', team_id=team.id, player_id=p.id) }}"
+                  onsubmit="return confirm('Take {{ short_name(p.name) }} off the roster? They will move to your sub pool.')">
+              <button class="row-remove" type="submit" title="Remove from roster">✕</button>
+            </form>
           </div>
         {% else %}
           <div class="list-row"><div class="sub">No players yet — add them or use Import.</div></div>

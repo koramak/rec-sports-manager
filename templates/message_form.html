@@ -25,7 +25,7 @@
 </p>
 
 {% if recipients %}
-<form method="post" class="stack">
+<form method="post" class="stack">{{ csrf_field() }}
   <label>Message</label>
   <textarea name="body" id="msg-body" required
             placeholder="Hey {first}, {team} plays {{ '{tournament} on {date}' if tournament else '{game}' }} — you in? {link}"></textarea>

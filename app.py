@@ -3,18 +3,29 @@ import csv
 import io
 import os
 import re
+import secrets
 import threading
+import time
 from datetime import datetime
 from functools import wraps
 
 from flask import (Flask, abort, flash, g, redirect, render_template, request,
                    session, url_for)
+from markupsafe import Markup
 
 import db
 import notify
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("REC_SECRET", "dev-secret-change-me")
+# On Render an unset REC_SECRET falls back to a random per-boot key (sessions
+# won't survive a restart) rather than a publicly known default.
+app.secret_key = (os.environ.get("REC_SECRET")
+                  or (secrets.token_hex(32) if os.environ.get("RENDER")
+                      else "dev-secret-change-me"))
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+if os.environ.get("RENDER"):
+    app.config["SESSION_COOKIE_SECURE"] = True
 
 POSITIONS = ["P", "C", "1B", "2B", "3B", "SS", "OF"]
 STATUSES = ["in", "out", "tbd"]
@@ -49,6 +60,25 @@ def short_bits(con, game, team):
     if not more and not genders:
         return None
     return {"more": more, "genders": " · ".join(genders)}
+
+
+# ------------------------------------------------------------ csrf
+
+@app.template_global("csrf_field")
+def csrf_field():
+    if "_csrf" not in session:
+        session["_csrf"] = secrets.token_hex(16)
+    return Markup('<input type="hidden" name="_csrf" value="%s">'
+                  % session["_csrf"])
+
+
+@app.before_request
+def check_csrf():
+    if request.method != "POST" or not app.config.get("CSRF_ENABLED", True):
+        return
+    tok, sent = session.get("_csrf"), request.form.get("_csrf")
+    if not (tok and sent and secrets.compare_digest(tok, sent)):
+        abort(400)
 
 
 # ------------------------------------------------------------ plumbing
@@ -177,14 +207,37 @@ def signup():
     return render_template("signup.html")
 
 
+# failed-login throttle: per client IP, in memory (fine for one worker)
+_login_fails = {}
+LOGIN_WINDOW, LOGIN_MAX = 15 * 60, 10
+
+
+def _client_ip():
+    fwd = request.headers.get("X-Forwarded-For", "")
+    return fwd.split(",")[0].strip() or request.remote_addr or "?"
+
+
+def _login_throttled(record_fail=False):
+    ip, now_ts = _client_ip(), time.time()
+    hits = [t for t in _login_fails.get(ip, []) if now_ts - t < LOGIN_WINDOW]
+    if record_fail:
+        hits.append(now_ts)
+    _login_fails[ip] = hits
+    return len(hits) >= LOGIN_MAX
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        if _login_throttled():
+            flash("Too many attempts. Try again in a few minutes.")
+            return render_template("login.html")
         email = request.form["email"].strip().lower()
         u = get_con().execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
         if u and db.check_password(u["password_hash"], request.form["password"]):
             session["uid"] = u["id"]
             return redirect(request.args.get("next") or url_for("dashboard"))
+        _login_throttled(record_fail=True)
         flash("Invalid email or password.")
     return render_template("login.html")
 

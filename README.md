@@ -22,6 +22,15 @@ python3 seed.py    # optional: demo data
 python3 app.py     # serves on $PORT (default 5000)
 ```
 
+## Tests
+
+```bash
+pip install -r requirements-dev.txt
+python3 -m pytest
+```
+
+The suite runs on every push via GitHub Actions (`.github/workflows/ci.yml`).
+
 Demo logins after seeding — manager: `zane@example.com` / `demo`,
 system admin: `admin@rec.local` / `admin`. Demo team RSVP link: `/demo`.
 

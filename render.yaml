@@ -6,3 +6,6 @@ services:
     buildCommand: pip install -r requirements.txt
     # seed fresh demo data on every deploy (test instance)
     startCommand: python seed.py && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1
+    envVars:
+      - key: REC_SECRET
+        generateValue: true

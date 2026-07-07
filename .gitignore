@@ -2,4 +2,5 @@ __pycache__/
 *.pyc
 rec.db
 .DS_Store
+.pytest_cache/
 Coach app redesign.zip

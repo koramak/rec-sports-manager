@@ -4,7 +4,7 @@
 <div class="auth-wrap">
   <h1>Manager log in</h1>
   <div class="card">
-    <form method="post" class="stack">
+    <form method="post" class="stack">{{ csrf_field() }}
       <label style="margin-top:0;">Email</label>
       <input type="email" name="email" required autofocus>
       <label>Password</label>

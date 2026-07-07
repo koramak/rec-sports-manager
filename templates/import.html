@@ -24,7 +24,7 @@
   <div class="sub" style="margin-top:4px;">Header row required. Columns: <code>name, gender, phone, email, positions, skill, notes</code>
     (name + phone or email required; phone must be 10 digits US; gender defaults to M;
     skill is competitive / intermediate / beginner).</div>
-  <form method="post" enctype="multipart/form-data" class="stack">
+  <form method="post" enctype="multipart/form-data" class="stack">{{ csrf_field() }}
     <label>Upload a CSV file…</label>
     <input type="file" name="csv_file" accept=".csv,text/csv">
     <label>…or paste / review rows here</label>

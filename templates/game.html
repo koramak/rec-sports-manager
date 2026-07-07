@@ -73,7 +73,7 @@
 <div class="card">
   {% if pool %}
     <div class="sub">Each sub gets a personal link for this game only.</div>
-    <form method="post" action="{{ url_for('invite_sub', game_id=game.id) }}" id="sub-form">
+    <form method="post" action="{{ url_for('invite_sub', game_id=game.id) }}" id="sub-form">{{ csrf_field() }}
       {% for p in pool %}
         <label class="check-row">
           <input type="checkbox" name="player_id" value="{{ p.id }}">

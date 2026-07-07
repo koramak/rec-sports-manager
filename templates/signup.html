@@ -4,7 +4,7 @@
 <div class="auth-wrap">
   <h1>Create account</h1>
   <div class="card">
-    <form method="post" class="stack">
+    <form method="post" class="stack">{{ csrf_field() }}
       <label style="margin-top:0;">Your name</label>
       <input type="text" name="name" required autofocus>
       <label>Email</label>

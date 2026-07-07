@@ -15,7 +15,7 @@
     <div class="eyebrow">{{ game.game_dt | gamedt }}</div>
     <div class="card-title" style="margin:2px 0;">{{ matchup(game) }}</div>
     <div class="sub">📍 {{ game.location or "Location TBD" }}{% if game.notes %} · {{ game.notes }}{% endif %}</div>
-    <form method="post">
+    <form method="post">{{ csrf_field() }}
       <div class="rsvp-buttons">
         <button name="status" value="in"  class="{{ 'sel-in'  if inv.status == 'in'  else '' }}">IN</button>
         <button name="status" value="out" class="{{ 'sel-out' if inv.status == 'out' else '' }}">OUT</button>

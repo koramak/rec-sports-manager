@@ -11,7 +11,7 @@
 {% block content %}
 <div class="auth-wrap">
 <h1 class="desk-title">{{ player.name if player else ("Add sub to pool" if is_sub else "Add player") }}</h1>
-<form method="post" class="stack">
+<form method="post" class="stack">{{ csrf_field() }}
   <label>Name</label>
   <input type="text" name="name" value="{{ player.name if player else '' }}" required>
   <div class="row2">
@@ -51,7 +51,7 @@
 <a class="cancel-link" href="{{ request.args.get('next') or (url_for('subs') if is_sub else url_for('dashboard')) }}">Cancel</a>
 {% if player %}
 <form method="post" action="{{ url_for('player_delete', player_id=player.id, next=request.args.get('next','')) }}"
-      onsubmit="return confirm('Delete {{ player.name }}? This removes their RSVPs too.')" style="margin-top:22px;">
+      onsubmit="return confirm('Delete {{ player.name }}? This removes their RSVPs too.')" style="margin-top:22px;">{{ csrf_field() }}
   <button class="btn danger block" type="submit">Delete player</button>
 </form>
 {% endif %}

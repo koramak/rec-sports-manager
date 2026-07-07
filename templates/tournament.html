@@ -41,7 +41,7 @@
         <div class="lr-main"><div class="lr-name">{{ short_name(r.player.name) }} <span class="g">{{ r.player.gender }}</span></div></div>
         <span class="status-pill status-{{ r.status }}">{{ r.status | upper }}</span>
         <form method="post" action="{{ url_for('tournament_remove', tournament_id=t.id, player_id=r.player.id) }}"
-              onsubmit="return confirm('Remove {{ short_name(r.player.name) }} from this tournament?{% if not r.player.is_sub %} They will move to your sub pool.{% endif %}')">
+              onsubmit="return confirm('Remove {{ short_name(r.player.name) }} from this tournament?{% if not r.player.is_sub %} They will move to your sub pool.{% endif %}')">{{ csrf_field() }}
           <button class="row-remove" type="submit" title="Remove from tournament">✕</button>
         </form>
       </div>
@@ -55,7 +55,7 @@
 <div class="card">
   <div class="sub">Rolling invites — add anyone, anytime. Reminders for unconfirmed RSVPs start 3 weeks before the event.</div>
   {% if candidates %}
-    <form method="post" action="{{ url_for('tournament_invite', tournament_id=t.id) }}" id="inv-form">
+    <form method="post" action="{{ url_for('tournament_invite', tournament_id=t.id) }}" id="inv-form">{{ csrf_field() }}
       {% for p in candidates %}
         <label class="check-row">
           <input type="checkbox" name="player_id" value="{{ p.id }}">

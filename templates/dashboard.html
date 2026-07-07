@@ -37,7 +37,7 @@
     </div>
 
     <div class="scheduler-note">Scheduler runs every minute: RSVP requests, daily reminders, 72-hour checks, tournament reminders.
-      <form method="post" action="{{ url_for('tick') }}" class="inline-form"><button type="submit">Run now</button></form>
+      <form method="post" action="{{ url_for('tick') }}" class="inline-form">{{ csrf_field() }}<button type="submit">Run now</button></form>
     </div>
   </div>
 

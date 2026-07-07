@@ -18,7 +18,7 @@
     <div class="eyebrow">{{ gi.game.game_dt | gamedt }}</div>
     <div class="card-title" style="margin:2px 0;">{{ matchup(gi.game) }}</div>
     <div class="sub">📍 {{ gi.game.location or "Location TBD" }}{% if gi.game.notes %} · {{ gi.game.notes }}{% endif %}</div>
-    <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">
+    <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">{{ csrf_field() }}
       <input type="hidden" name="event_type" value="game">
       <input type="hidden" name="event_id" value="{{ gi.game.id }}">
       <div class="rsvp-buttons">
@@ -48,7 +48,7 @@
     <div class="eyebrow">Tournament · {{ ti.t.date | fmtdate }}</div>
     <div class="card-title" style="margin:2px 0;">{{ ti.t.name }}</div>
     <div class="sub">{{ ti.t.division }} · {{ ti.t.location or "Location TBD" }}{% if ti.t.host %} · hosted by {{ ti.t.host }}{% endif %}{% if ti.t.cost %} · ~${{ "%.0f" | format(ti.t.cost) }}/person{% endif %}</div>
-    <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">
+    <form method="post" action="{{ url_for('player_rsvp_post', team_id=team.id, player_id=player.id) }}">{{ csrf_field() }}
       <input type="hidden" name="event_type" value="tournament">
       <input type="hidden" name="event_id" value="{{ ti.t.id }}">
       <div class="rsvp-buttons">

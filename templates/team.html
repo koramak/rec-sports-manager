@@ -97,7 +97,7 @@
             <div class="lr-g">{{ p.gender }}</div>
             <a class="edit-link" href="{{ url_for('player_edit', player_id=p.id, next=request.path) }}">Edit</a>
             <form method="post" action="{{ url_for('roster_remove', team_id=team.id, player_id=p.id) }}"
-                  onsubmit="return confirm('Take {{ short_name(p.name) }} off the roster? They will move to your sub pool.')">
+                  onsubmit="return confirm('Take {{ short_name(p.name) }} off the roster? They will move to your sub pool.')">{{ csrf_field() }}
               <button class="row-remove" type="submit" title="Remove from roster">✕</button>
             </form>
           </div>

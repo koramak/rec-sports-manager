@@ -11,7 +11,7 @@
 {% block content %}
 <div class="auth-wrap">
 <h1 class="desk-title">{{ team.name if team else "New team" }}</h1>
-<form method="post" class="stack">
+<form method="post" class="stack">{{ csrf_field() }}
   <label>Team name</label>
   <input type="text" name="name" value="{{ team.name if team else '' }}" required>
   <label>Sport / league</label>
@@ -50,14 +50,14 @@
         <div class="lr-meta">{{ cm.email }}</div>
       </div>
       <form method="post" class="inline-form"
-            action="{{ url_for('comanager_remove', team_id=team.id, user_id=cm.id) }}">
+            action="{{ url_for('comanager_remove', team_id=team.id, user_id=cm.id) }}">{{ csrf_field() }}
         <button class="btn small danger" type="submit">Remove</button>
       </form>
     </div>
   {% else %}
     <p class="sub">No co-managers yet. Co-managers get identical management access to this team.</p>
   {% endfor %}
-  <form method="post" action="{{ url_for('comanager_add', team_id=team.id) }}" class="stack">
+  <form method="post" action="{{ url_for('comanager_add', team_id=team.id) }}" class="stack">{{ csrf_field() }}
     <label>Add co-manager by email <span class="opt">— they need a manager account</span></label>
     <input type="email" name="email" required>
     <button class="btn small" type="submit" style="margin-top:8px;">Add co-manager</button>
